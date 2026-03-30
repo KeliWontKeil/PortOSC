@@ -1,4 +1,5 @@
 ﻿using System.IO.Ports;
+using PortOSC.Transport;
 using Tools;
 
 namespace _SerialPortSource
@@ -11,7 +12,7 @@ namespace _SerialPortSource
         public string? StopBits { get; set; }
         public string? Parity { get; set; }
     }
-    public class SerialPortSource
+    public class SerialPortSource : IReceiveEndpoint
     {
         private readonly SerialPort _SerialPort;
         public SerialConfig SerialConfig { get; set; }
@@ -20,6 +21,11 @@ namespace _SerialPortSource
 
         public event EventHandler<byte[]>? RawDataReceived;
         public event EventHandler<Exception>? ReceiveErrorOccurred;
+        public event EventHandler<byte[]>? DataReceived
+        {
+            add => RawDataReceived += value;
+            remove => RawDataReceived -= value;
+        }
 
         public SerialPortSource(SerialConfig? config = default)
         {

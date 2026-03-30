@@ -1,10 +1,11 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using PortOSC.Transport;
 using Tools;
 
 namespace TcpConnect
 {
-    public sealed class SimpleTcpClient : IDisposable
+    public sealed class SimpleTcpClient : IDisposable, IReceiveEndpoint
     {
         public int ToConnectServerPort { get; set; }
         public IPAddress? ToConnectServerIPaddress { get; set; }
@@ -20,6 +21,11 @@ namespace TcpConnect
         public event EventHandler<Exception>? ReceiveErrorOccurred;
         public event EventHandler<Exception>? SendErrorOccurred;
         public event EventHandler<byte[]>? ReceiveMassage;
+        public event EventHandler<byte[]>? DataReceived
+        {
+            add => ReceiveMassage += value;
+            remove => ReceiveMassage -= value;
+        }
 
         public SimpleTcpClient(string? InputStrIPaddress = default, int InputPort = default)
         {
@@ -218,7 +224,7 @@ namespace TcpConnect
         }
     }
 
-    public class OneClientConnectiongOfServer(string? IP = default, int Port = default)
+    public class OneClientConnectiongOfServer(string? IP = default, int Port = default) : IReceiveEndpoint
     {
         private SimpleTcpServer? Server;
         private Task? ServerListenTaskHandle;
@@ -233,6 +239,11 @@ namespace TcpConnect
         public event EventHandler<Exception>? ReceiveErrorOccurred;
         public event EventHandler<Exception>? SendErrorOccurred;
         public event EventHandler<byte[]>? ReceiveMassage;
+        public event EventHandler<byte[]>? DataReceived
+        {
+            add => ReceiveMassage += value;
+            remove => ReceiveMassage -= value;
+        }
 
         private async Task ServerListenTask(CancellationToken cancellationtoken)
         {

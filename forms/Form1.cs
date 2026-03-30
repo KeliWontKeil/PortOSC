@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.IO.Ports;
 using System.Net.Sockets;
 using System.Text;
+using PortOSC.Services;
+using PortOSC.Transport;
 using TcpConnect;
 using Tools;
 using UdpConnect;
@@ -21,10 +23,10 @@ namespace PortOSC
         private readonly SimpleTcpClient OSCClient;
         private readonly SimpleUdpEndpoint OSCUDPEndpoint;
 
-        private readonly List<string> OSC_RecData;
-        private readonly BlockingCollection<double[]> DataQueue;
-
-        private readonly CancellationTokenSource _UpdatePlotTask_cts;
+        private readonly ReceiveEndpointHub _receiveEndpointHub;
+        private readonly ReceivePipeline _receivePipeline;
+        private readonly ConcurrentQueue<double[]> _plotQueue;
+        private readonly System.Windows.Forms.Timer _plotRefreshTimer;
         private string HeadStr, EndStr;
         private List<ScottPlot.Plottable.DataLogger> loggers;
         private int TimeStamp;
@@ -48,8 +50,9 @@ namespace PortOSC
         {
             InitializeComponent();
 
-            OSC_RecData = [];
-            DataQueue = [];
+            _receivePipeline = new ReceivePipeline();
+            _plotQueue = [];
+            _plotRefreshTimer = new System.Windows.Forms.Timer();
             HeadStr = new string("");
             EndStr = new string("");
             loggers = [];
@@ -68,27 +71,30 @@ namespace PortOSC
             LoadConfig("DefaultConfig.json");
 
             OSCSerialPort = new SerialPortSource();
-            OSCSerialPort.RawDataReceived += PortReceivDataHandle;
             OSCSerialPort.SerialState.ValueChangedOccured += SerialStateChangeHandle;
             OSCSerialPort.ReceiveErrorOccurred += SerialReceiveErrorHandle;
 
             OSCServerConnection = new OneClientConnectiongOfServer();
             OSCServerConnection.ReceiveErrorOccurred += OSCServerReceiveErrorHandle;
             OSCServerConnection.SendErrorOccurred += OSCServerSendErrorHandle;
-            OSCServerConnection.ReceiveMassage += PortReceivDataHandle;
             OSCServerConnection.ServerConnectState.ValueChangedOccured += OSCServerStateChangeHandle;
 
             OSCClient = new SimpleTcpClient();
-            OSCClient.ReceiveMassage += PortReceivDataHandle;
             OSCClient.ReceiveErrorOccurred += OSCClientReceiveErrorHandle;
             OSCClient.SendErrorOccurred += OSCClientSendErrorHandle;
             OSCClient.ClientConnectState.ValueChangedOccured += OSCClientStateChangeHandle;
 
             OSCUDPEndpoint = new SimpleUdpEndpoint();
-            OSCUDPEndpoint.ReceiveMessage += PortReceivDataHandle;
             OSCUDPEndpoint.ReceiveErrorOccurred += OSCUDPReceiveErrorHandle;
             OSCUDPEndpoint.SendErrorOccurred += OSCUDPSendErrorHandle;
             OSCUDPEndpoint.UdpState.ValueChangedOccured += OSCUDPStateChangeHandle;
+
+            _receiveEndpointHub = new ReceiveEndpointHub();
+            _receiveEndpointHub.Register(OSCSerialPort);
+            _receiveEndpointHub.Register(OSCServerConnection);
+            _receiveEndpointHub.Register(OSCClient);
+            _receiveEndpointHub.Register(OSCUDPEndpoint);
+            _receiveEndpointHub.DataReceived += PortReceivDataHandle;
 
             TransmitServerConnection = new OneClientConnectiongOfServer();
             TransmitServerConnection.ReceiveErrorOccurred += TransmitServerReceiveErrorHandle;
@@ -96,8 +102,9 @@ namespace PortOSC
             TransmitServerConnection.ReceiveMassage += TransmitServerReceivedMassageSend;
             TransmitServerConnection.ServerConnectState.ValueChangedOccured += TransmitServerStateChangeHandle;
 
-            _UpdatePlotTask_cts = new CancellationTokenSource();
-            Task.Run(() => UpdatePlot(_UpdatePlotTask_cts.Token), _UpdatePlotTask_cts.Token);
+            _plotRefreshTimer.Interval = 33;
+            _plotRefreshTimer.Tick += PlotRefreshTimerTick;
+            _plotRefreshTimer.Start();
 
         }
 
@@ -377,67 +384,98 @@ namespace PortOSC
 
         private void PortReceivDataHandle(object? sender, byte[] e)
         {
-            string str1 = "";
-            int length = e.Length;
-            byte[] ReceivedBuf = new byte[length];
-
-            if ((!StopSendCheckBox.Checked) && (TransmitServerConnection.ServerConnectState.Value == OneClientConnectiongOfServer.ConnectState.Connected))
-            {
-                Task.Run(async () => await TransmitServerConnection.AsyncSend(ReceivedBuf));
-            }
-
             try
             {
-                Buffer.BlockCopy(e, 0, ReceivedBuf, 0, length);
-                if (!StopRec.Checked)
+                var result = _receivePipeline.Process(e, BuildReceivePipelineOptions());
+                var stopSend = SafeOperateTools.SafeRead(StopSendCheckBox, () => StopSendCheckBox.Checked);
+
+                if (!stopSend &&
+                    TransmitServerConnection.ServerConnectState.Value == OneClientConnectiongOfServer.ConnectState.Connected)
                 {
-                    if (EnableOsc.Checked)
-                    {
-                        var RecStr = Encoding.ASCII.GetString(ReceivedBuf);
-                        string[] parts = RecStr.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                        OSC_RecData.AddRange(parts);
-                        if (OSC_RecData.Count > ((int)ChannelLength.Value + 2) * 2 + (int)AdditionalBufferLengthBox.Value)
-                        {
-                            OSC_RecData.RemoveRange(0, OSC_RecData.Count - ((int)ChannelLength.Value + 2) * 2 - (int)AdditionalBufferLengthBox.Value);
-                        }
-                        int Index_End = OSC_RecData.LastIndexOf(EndStr);
-                        int Index_Start = OSC_RecData.LastIndexOf(HeadStr);
-
-                        if ((Index_Start != -1) && (Index_End != -1) && (Index_Start < Index_End + 1))
-                        {
-                            try
-                            {
-                                var DataStr = OSC_RecData.GetRange(Index_Start + 1, Index_End - Index_Start - 1);
-                                var Data = DataStr.Select(Str => Convert.ToDouble(Str)).ToArray();
-                                DataQueue.Add(Data);
-                            }
-                            catch { }
-                        }
-                    }
-
-                    if (ShowHex.Checked)
-                    {
-                        for (int i = 0; i < length; i++)
-                        {
-                            str1 += ReceivedBuf[i].ToString("X2");
-                            str1 += " ";
-                        }
-                    }
-                    else
-                    {
-                        str1 = Encoding.ASCII.GetString(ReceivedBuf);
-                    }
-
-                    if (RecNewLine.Checked)
-                    {
-                        SafeOperateTools.SafeInvoke(RecText, Obj => Obj.AppendText("\r\n"));
-                    }
-                    SafeOperateTools.SafeInvoke(RecText, Obj => Obj.AppendText(str1));
+                    _ = TransmitServerConnection.AsyncSend(result.ForwardData);
                 }
+
+                foreach (var frame in result.OscFrames)
+                {
+                    _plotQueue.Enqueue(frame);
+                }
+
+                if (string.IsNullOrEmpty(result.DisplayText))
+                {
+                    return;
+                }
+
+                SafeOperateTools.SafeInvoke(RecText, obj =>
+                {
+                    if (result.AppendNewLine)
+                    {
+                        obj.AppendText("\r\n");
+                    }
+
+                    obj.AppendText(result.DisplayText);
+                });
             }
-            catch
+            catch (InvalidOperationException)
             {
                 ShowMassageTools.ReportMassage(StateMassageTextBox, "数据转换发生错误", ShowMassageTools.LogType.Error);
+            }
+            catch (ArgumentException)
+            {
+                ShowMassageTools.ReportMassage(StateMassageTextBox, "数据转换发生错误", ShowMassageTools.LogType.Error);
+            }
+            catch (FormatException)
+            {
+                ShowMassageTools.ReportMassage(StateMassageTextBox, "数据转换发生错误", ShowMassageTools.LogType.Error);
+            }
+        }
+
+        private ReceivePipelineOptions BuildReceivePipelineOptions()
+        {
+            var stopReceive = SafeOperateTools.SafeRead(StopRec, () => StopRec.Checked);
+            var enableOsc = SafeOperateTools.SafeRead(EnableOsc, () => EnableOsc.Checked);
+            var showHex = SafeOperateTools.SafeRead(ShowHex, () => ShowHex.Checked);
+            var appendNewLine = SafeOperateTools.SafeRead(RecNewLine, () => RecNewLine.Checked);
+            var channelLength = SafeOperateTools.SafeRead(ChannelLength, () => decimal.ToInt32(ChannelLength.Value));
+            var additionalBufferLength = SafeOperateTools.SafeRead(AdditionalBufferLengthBox, () => decimal.ToInt32(AdditionalBufferLengthBox.Value));
+
+            return new ReceivePipelineOptions(
+                stopReceive,
+                enableOsc,
+                showHex,
+                appendNewLine,
+                channelLength,
+                additionalBufferLength,
+                HeadStr,
+                EndStr);
+        }
+
+        private void PlotRefreshTimerTick(object? sender, EventArgs e)
+        {
+            if (_plotQueue.IsEmpty)
+            {
+                return;
+            }
+
+            var frameUpdated = false;
+            const int maxDrainCount = 1200;
+            var drainCount = 0;
+
+            while (drainCount < maxDrainCount && _plotQueue.TryDequeue(out var frame))
+            {
+                for (int ch = 0; ch < frame.Length && ch < loggers.Count; ch++)
+                {
+                    dataPoints[ch].Add(new DataPoint(TimeStamp, frame[ch]));
+                    loggers[ch].Add(TimeStamp, frame[ch]);
+                }
+
+                TimeStamp++;
+                frameUpdated = true;
+                drainCount++;
+            }
+
+            if (frameUpdated)
+            {
+                formPlot1.Refresh();
             }
 
         }
@@ -887,6 +925,10 @@ namespace PortOSC
         {
             try
             {
+                _plotRefreshTimer.Stop();
+                _plotRefreshTimer.Dispose();
+                _receiveEndpointHub.Dispose();
+
                 SaveConfigTools.SaveConfig<ConfigData>(new ConfigData
                 {
                     PortName = PortNameBox.Text,
@@ -1006,25 +1048,6 @@ namespace PortOSC
         }
 
         //示波器显示相关//
-        private void UpdatePlot(CancellationToken cancellationToken)
-        {
-            foreach (var frame in DataQueue.GetConsumingEnumerable(cancellationToken))
-            {
-                this.BeginInvoke((MethodInvoker)(() =>
-                {
-                    for (int ch = 0; ch < frame.Length && ch < loggers.Count; ch++)
-                    {
-                        dataPoints[ch].Add(new DataPoint(TimeStamp, frame[ch]));
-                        loggers[ch].Add(TimeStamp, frame[ch]);
-                    }
-                    TimeStamp++;
-                    formPlot1.Refresh();
-                }));
-                if (cancellationToken.IsCancellationRequested)
-                    break;
-            }
-        }
-
         private void ResetPlot()
         {
             formPlot1.Plot.Clear();

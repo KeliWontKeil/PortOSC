@@ -1,10 +1,11 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using PortOSC.Transport;
 using Tools;
 
 namespace UdpConnect
 {
-    public sealed class SimpleUdpEndpoint : IDisposable
+    public sealed class SimpleUdpEndpoint : IDisposable, IReceiveEndpoint
     {
         public string? RemoteIPaddress { get; set; }
         public int RemotetPort { get; set; }
@@ -24,6 +25,11 @@ namespace UdpConnect
         public event EventHandler<byte[]>? ReceiveMessage;
         public event EventHandler<Exception>? ReceiveErrorOccurred;
         public event EventHandler<Exception>? SendErrorOccurred;
+        public event EventHandler<byte[]>? DataReceived
+        {
+            add => ReceiveMessage += value;
+            remove => ReceiveMessage -= value;
+        }
 
         public SimpleUdpEndpoint(string? IP = default, int Port = default)
         {

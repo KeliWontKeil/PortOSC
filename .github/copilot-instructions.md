@@ -11,11 +11,18 @@
 3. Keep behavior compatible while refactoring
 
 ## Coding Rules
-- Prefer small, behavior-preserving refactors
+- Prefer behavior-preserving changes and follow the current task's refactor scope
 - Do not introduce new dependencies unless necessary
 - Reuse existing utilities in `src/Tools.cs` when possible
 - Keep transport code (`Serial/TCP/UDP`) independent from UI controls
 - Use async APIs consistently, avoid fire-and-forget when reliability matters
+- Implement large-scale refactoring in a single pass rather than breaking it into smaller steps
+- After each modification, perform local Git commits without pushing
+- Maintain version control using `1.2.3` rule:
+  - `1`: major version (change only for fundamental architecture/function changes)
+  - `2`: push-ready minor version (validated milestones for GitHub push)
+  - `3`: local revision (increment on every local commit)
+- If asked to modify the current commit, amend it instead of creating a new commit
 
 ## File/Layer Expectations
 - UI orchestration: `forms/`
