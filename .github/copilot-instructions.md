@@ -1,0 +1,28 @@
+# Copilot Instructions for PortOSC
+
+## Project Snapshot
+- Tech: `.NET 8`, `Windows Forms`
+- Main goal: serial/network debugging + lightweight oscilloscope plotting
+- Current architecture: event-driven, but `Form1` is highly coupled to transport and parsing logic
+
+## What to optimize first
+1. Reduce duplication in `Form1` state/UI toggling logic
+2. Extract parsing/forwarding logic from UI handlers
+3. Keep behavior compatible while refactoring
+
+## Coding Rules
+- Prefer small, behavior-preserving refactors
+- Do not introduce new dependencies unless necessary
+- Reuse existing utilities in `src/Tools.cs` when possible
+- Keep transport code (`Serial/TCP/UDP`) independent from UI controls
+- Use async APIs consistently, avoid fire-and-forget when reliability matters
+
+## File/Layer Expectations
+- UI orchestration: `forms/`
+- Transport and services: `src/`
+- Reusable controls/widgets: `widget/`
+- Docs and architecture notes: `docs/`
+
+## Validation
+- After changes, run build verification
+- If changing parsing behavior, document input/output examples
