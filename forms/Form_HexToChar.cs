@@ -1,7 +1,11 @@
-﻿namespace PortOSC
+﻿using System.Text;
+
+namespace PortOSC
 {
     public partial class Form_HexToChar : Form
     {
+        private static readonly Encoding StringEncoding = Encoding.UTF8;
+
         public Form_HexToChar()
         {
             InitializeComponent();
@@ -158,6 +162,38 @@
             {
                 Hex_5.Text = "";
                 Hex_5.BackColor = System.Drawing.Color.Yellow;
+            }
+        }
+
+        private void StringText_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                StringText.BackColor = System.Drawing.Color.White;
+                StringHexText.Text = Convert.ToHexString(StringEncoding.GetBytes(StringText.Text));
+                StringHexText.BackColor = System.Drawing.Color.White;
+            }
+            catch
+            {
+                StringHexText.Text = "";
+                StringHexText.BackColor = System.Drawing.Color.Yellow;
+            }
+        }
+
+        private void StringHexText_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                StringHexText.BackColor = System.Drawing.Color.White;
+                var hex = new string(StringHexText.Text.Where(c => !char.IsWhiteSpace(c)).ToArray());
+                var bytes = Convert.FromHexString(hex);
+                StringText.Text = StringEncoding.GetString(bytes);
+                StringText.BackColor = System.Drawing.Color.White;
+            }
+            catch
+            {
+                StringText.Text = "";
+                StringText.BackColor = System.Drawing.Color.Yellow;
             }
         }
 

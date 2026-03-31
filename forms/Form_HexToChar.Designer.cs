@@ -40,6 +40,9 @@ namespace PortOSC
             Hex_4 = new TextBox();
             Hex_3 = new TextBox();
             Hex_2 = new TextBox();
+            label9 = new Label();
+            StringText = new TextBox();
+            StringHexText = new TextBox();
             SuspendLayout();
             // 
             // label8
@@ -162,12 +165,42 @@ namespace PortOSC
             Hex_2.TabIndex = 39;
             Hex_2.Leave += Hex_2_Leave;
             // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(12, 245);
+            label9.Margin = new Padding(4, 0, 4, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(78, 20);
+            label9.TabIndex = 50;
+            label9.Text = "字符串转换";
+            // 
+            // StringText
+            // 
+            StringText.BorderStyle = BorderStyle.FixedSingle;
+            StringText.Location = new Point(22, 272);
+            StringText.Margin = new Padding(4, 5, 4, 5);
+            StringText.Name = "StringText";
+            StringText.Size = new Size(130, 27);
+            StringText.TabIndex = 51;
+            StringText.Leave += StringText_Leave;
+            // 
+            // StringHexText
+            // 
+            StringHexText.BorderStyle = BorderStyle.FixedSingle;
+            StringHexText.Location = new Point(22, 308);
+            StringHexText.Margin = new Padding(4, 5, 4, 5);
+            StringHexText.Name = "StringHexText";
+            StringHexText.Size = new Size(130, 27);
+            StringHexText.TabIndex = 52;
+            StringHexText.Leave += StringHexText_Leave;
+            // 
             // Form_HexToChar
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(171, 259);
+            ClientSize = new Size(171, 345);
             Controls.Add(label8);
             Controls.Add(Char_1);
             Controls.Add(Char_5);
@@ -179,6 +212,9 @@ namespace PortOSC
             Controls.Add(Hex_4);
             Controls.Add(Hex_3);
             Controls.Add(Hex_2);
+            Controls.Add(label9);
+            Controls.Add(StringText);
+            Controls.Add(StringHexText);
             Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
             MinimizeBox = false;
@@ -203,5 +239,8 @@ namespace PortOSC
         private System.Windows.Forms.TextBox Hex_4;
         private System.Windows.Forms.TextBox Hex_3;
         private System.Windows.Forms.TextBox Hex_2;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox StringText;
+        private System.Windows.Forms.TextBox StringHexText;
     }
 }

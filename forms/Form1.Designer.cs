@@ -128,6 +128,7 @@ namespace PortOSC
             UDPToolStripMenuItem = new ToolStripMenuItem();
             ToolsToolStripMenuItem = new ToolStripMenuItem();
             OpenHexToCharTool = new ToolStripMenuItem();
+            OpenSendStringLibraryTool = new ToolStripMenuItem();
             ReadConfig = new ToolStripMenuItem();
             SaveConfigToAnother = new ToolStripMenuItem();
             OpenHelp = new ToolStripMenuItem();
@@ -159,10 +160,10 @@ namespace PortOSC
             // 
             PortNameBox.DropDownStyle = ComboBoxStyle.DropDownList;
             PortNameBox.FormattingEnabled = true;
-            PortNameBox.Location = new Point(56, 63);
-            PortNameBox.Margin = new Padding(3, 4, 3, 4);
+            PortNameBox.Location = new Point(72, 74);
+            PortNameBox.Margin = new Padding(4, 5, 4, 5);
             PortNameBox.Name = "PortNameBox";
-            PortNameBox.Size = new Size(84, 25);
+            PortNameBox.Size = new Size(107, 28);
             PortNameBox.TabIndex = 0;
             // 
             // BaudRateBox
@@ -170,10 +171,10 @@ namespace PortOSC
             BaudRateBox.DropDownStyle = ComboBoxStyle.DropDownList;
             BaudRateBox.FormattingEnabled = true;
             BaudRateBox.Items.AddRange(new object[] { "1200", "2400", "4800", "9600", "14400", "19200", "38400", "43000", "57600", "78600", "115200", "128000", "230400", "256000", "460800", "921600", "1382400" });
-            BaudRateBox.Location = new Point(56, 95);
-            BaudRateBox.Margin = new Padding(3, 4, 3, 4);
+            BaudRateBox.Location = new Point(72, 112);
+            BaudRateBox.Margin = new Padding(4, 5, 4, 5);
             BaudRateBox.Name = "BaudRateBox";
-            BaudRateBox.Size = new Size(84, 25);
+            BaudRateBox.Size = new Size(107, 28);
             BaudRateBox.TabIndex = 1;
             // 
             // DataBitsBox
@@ -181,10 +182,10 @@ namespace PortOSC
             DataBitsBox.DropDownStyle = ComboBoxStyle.DropDownList;
             DataBitsBox.FormattingEnabled = true;
             DataBitsBox.Items.AddRange(new object[] { "5", "6", "7", "8" });
-            DataBitsBox.Location = new Point(56, 128);
-            DataBitsBox.Margin = new Padding(3, 4, 3, 4);
+            DataBitsBox.Location = new Point(72, 151);
+            DataBitsBox.Margin = new Padding(4, 5, 4, 5);
             DataBitsBox.Name = "DataBitsBox";
-            DataBitsBox.Size = new Size(84, 25);
+            DataBitsBox.Size = new Size(107, 28);
             DataBitsBox.TabIndex = 2;
             // 
             // StopBitsBox
@@ -192,10 +193,10 @@ namespace PortOSC
             StopBitsBox.DropDownStyle = ComboBoxStyle.DropDownList;
             StopBitsBox.FormattingEnabled = true;
             StopBitsBox.Items.AddRange(new object[] { "1", "1.5", "2" });
-            StopBitsBox.Location = new Point(56, 160);
-            StopBitsBox.Margin = new Padding(3, 4, 3, 4);
+            StopBitsBox.Location = new Point(72, 188);
+            StopBitsBox.Margin = new Padding(4, 5, 4, 5);
             StopBitsBox.Name = "StopBitsBox";
-            StopBitsBox.Size = new Size(84, 25);
+            StopBitsBox.Size = new Size(107, 28);
             StopBitsBox.TabIndex = 3;
             // 
             // ParityBox
@@ -203,49 +204,49 @@ namespace PortOSC
             ParityBox.DropDownStyle = ComboBoxStyle.DropDownList;
             ParityBox.FormattingEnabled = true;
             ParityBox.Items.AddRange(new object[] { "无", "奇校验", "偶校验" });
-            ParityBox.Location = new Point(56, 192);
-            ParityBox.Margin = new Padding(3, 4, 3, 4);
+            ParityBox.Location = new Point(72, 226);
+            ParityBox.Margin = new Padding(4, 5, 4, 5);
             ParityBox.Name = "ParityBox";
-            ParityBox.Size = new Size(84, 25);
+            ParityBox.Size = new Size(107, 28);
             ParityBox.TabIndex = 4;
             // 
             // RecText
             // 
             RecText.BackColor = SystemColors.ButtonHighlight;
             RecText.BorderStyle = BorderStyle.FixedSingle;
-            RecText.Location = new Point(230, 31);
-            RecText.Margin = new Padding(3, 4, 3, 4);
+            RecText.Location = new Point(296, 36);
+            RecText.Margin = new Padding(4, 5, 4, 5);
             RecText.Multiline = true;
             RecText.Name = "RecText";
             RecText.ReadOnly = true;
-            RecText.Size = new Size(435, 421);
+            RecText.Size = new Size(559, 495);
             RecText.TabIndex = 5;
             // 
             // StrSendText
             // 
-            StrSendText.Location = new Point(306, 556);
-            StrSendText.Margin = new Padding(3, 4, 3, 4);
+            StrSendText.Location = new Point(393, 654);
+            StrSendText.Margin = new Padding(4, 5, 4, 5);
             StrSendText.Multiline = true;
             StrSendText.Name = "StrSendText";
-            StrSendText.Size = new Size(359, 83);
+            StrSendText.Size = new Size(460, 97);
             StrSendText.TabIndex = 6;
             // 
             // HexSendText
             // 
-            HexSendText.Location = new Point(306, 459);
-            HexSendText.Margin = new Padding(3, 4, 3, 4);
+            HexSendText.Location = new Point(393, 540);
+            HexSendText.Margin = new Padding(4, 5, 4, 5);
             HexSendText.Multiline = true;
             HexSendText.Name = "HexSendText";
-            HexSendText.Size = new Size(359, 91);
+            HexSendText.Size = new Size(460, 106);
             HexSendText.TabIndex = 7;
             // 
             // OpenSerialPort
             // 
             OpenSerialPort.ImeMode = ImeMode.NoControl;
-            OpenSerialPort.Location = new Point(136, 15);
-            OpenSerialPort.Margin = new Padding(3, 4, 3, 4);
+            OpenSerialPort.Location = new Point(175, 18);
+            OpenSerialPort.Margin = new Padding(4, 5, 4, 5);
             OpenSerialPort.Name = "OpenSerialPort";
-            OpenSerialPort.Size = new Size(72, 63);
+            OpenSerialPort.Size = new Size(93, 74);
             OpenSerialPort.TabIndex = 8;
             OpenSerialPort.Text = "打开串口";
             OpenSerialPort.UseVisualStyleBackColor = true;
@@ -255,10 +256,10 @@ namespace PortOSC
             // 
             CloseSerialPort.Enabled = false;
             CloseSerialPort.ImeMode = ImeMode.NoControl;
-            CloseSerialPort.Location = new Point(136, 90);
-            CloseSerialPort.Margin = new Padding(3, 4, 3, 4);
+            CloseSerialPort.Location = new Point(175, 106);
+            CloseSerialPort.Margin = new Padding(4, 5, 4, 5);
             CloseSerialPort.Name = "CloseSerialPort";
-            CloseSerialPort.Size = new Size(72, 63);
+            CloseSerialPort.Size = new Size(93, 74);
             CloseSerialPort.TabIndex = 9;
             CloseSerialPort.Text = "关闭串口";
             CloseSerialPort.UseVisualStyleBackColor = true;
@@ -268,10 +269,10 @@ namespace PortOSC
             // 
             EnableOsc.AutoSize = true;
             EnableOsc.ImeMode = ImeMode.NoControl;
-            EnableOsc.Location = new Point(3, 4);
-            EnableOsc.Margin = new Padding(3, 4, 3, 4);
+            EnableOsc.Location = new Point(4, 5);
+            EnableOsc.Margin = new Padding(4, 5, 4, 5);
             EnableOsc.Name = "EnableOsc";
-            EnableOsc.Size = new Size(87, 21);
+            EnableOsc.Size = new Size(106, 24);
             EnableOsc.TabIndex = 11;
             EnableOsc.Text = "启用示波器";
             EnableOsc.UseVisualStyleBackColor = true;
@@ -280,10 +281,10 @@ namespace PortOSC
             // HexSendButton
             // 
             HexSendButton.ImeMode = ImeMode.NoControl;
-            HexSendButton.Location = new Point(227, 522);
-            HexSendButton.Margin = new Padding(3, 4, 3, 4);
+            HexSendButton.Location = new Point(292, 614);
+            HexSendButton.Margin = new Padding(4, 5, 4, 5);
             HexSendButton.Name = "HexSendButton";
-            HexSendButton.Size = new Size(76, 27);
+            HexSendButton.Size = new Size(98, 32);
             HexSendButton.TabIndex = 15;
             HexSendButton.Text = "HEX发送";
             HexSendButton.UseVisualStyleBackColor = true;
@@ -293,10 +294,10 @@ namespace PortOSC
             // 
             StrSendButton.Font = new Font("微软雅黑", 9F, FontStyle.Regular, GraphicsUnit.Point, 134);
             StrSendButton.ImeMode = ImeMode.NoControl;
-            StrSendButton.Location = new Point(227, 612);
-            StrSendButton.Margin = new Padding(3, 4, 3, 4);
+            StrSendButton.Location = new Point(292, 720);
+            StrSendButton.Margin = new Padding(4, 5, 4, 5);
             StrSendButton.Name = "StrSendButton";
-            StrSendButton.Size = new Size(76, 27);
+            StrSendButton.Size = new Size(98, 32);
             StrSendButton.TabIndex = 16;
             StrSendButton.Text = "字符串发送";
             StrSendButton.UseVisualStyleBackColor = true;
@@ -305,10 +306,10 @@ namespace PortOSC
             // ClearRec
             // 
             ClearRec.ImeMode = ImeMode.NoControl;
-            ClearRec.Location = new Point(128, 258);
-            ClearRec.Margin = new Padding(3, 4, 3, 4);
+            ClearRec.Location = new Point(165, 304);
+            ClearRec.Margin = new Padding(4, 5, 4, 5);
             ClearRec.Name = "ClearRec";
-            ClearRec.Size = new Size(84, 48);
+            ClearRec.Size = new Size(108, 56);
             ClearRec.TabIndex = 17;
             ClearRec.Text = "清接收区";
             ClearRec.UseVisualStyleBackColor = true;
@@ -316,27 +317,28 @@ namespace PortOSC
             // 
             // HeadTextBox
             // 
-            HeadTextBox.Location = new Point(752, 554);
-            HeadTextBox.Margin = new Padding(3, 4, 3, 4);
+            HeadTextBox.Location = new Point(967, 652);
+            HeadTextBox.Margin = new Padding(4, 5, 4, 5);
             HeadTextBox.Name = "HeadTextBox";
-            HeadTextBox.Size = new Size(251, 23);
+            HeadTextBox.Size = new Size(322, 27);
             HeadTextBox.TabIndex = 18;
             // 
             // EndTextBox
             // 
-            EndTextBox.Location = new Point(752, 585);
-            EndTextBox.Margin = new Padding(3, 4, 3, 4);
+            EndTextBox.Location = new Point(967, 688);
+            EndTextBox.Margin = new Padding(4, 5, 4, 5);
             EndTextBox.Name = "EndTextBox";
-            EndTextBox.Size = new Size(251, 23);
+            EndTextBox.Size = new Size(322, 27);
             EndTextBox.TabIndex = 19;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.ImeMode = ImeMode.NoControl;
-            label1.Location = new Point(12, 66);
+            label1.Location = new Point(15, 78);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(44, 17);
+            label1.Size = new Size(54, 20);
             label1.TabIndex = 20;
             label1.Text = "端口号";
             // 
@@ -344,9 +346,10 @@ namespace PortOSC
             // 
             label2.AutoSize = true;
             label2.ImeMode = ImeMode.NoControl;
-            label2.Location = new Point(12, 99);
+            label2.Location = new Point(15, 116);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(44, 17);
+            label2.Size = new Size(54, 20);
             label2.TabIndex = 21;
             label2.Text = "波特率";
             // 
@@ -354,9 +357,10 @@ namespace PortOSC
             // 
             label3.AutoSize = true;
             label3.ImeMode = ImeMode.NoControl;
-            label3.Location = new Point(12, 131);
+            label3.Location = new Point(15, 154);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(44, 17);
+            label3.Size = new Size(54, 20);
             label3.TabIndex = 22;
             label3.Text = "数据位";
             // 
@@ -364,9 +368,10 @@ namespace PortOSC
             // 
             label4.AutoSize = true;
             label4.ImeMode = ImeMode.NoControl;
-            label4.Location = new Point(12, 163);
+            label4.Location = new Point(15, 192);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(44, 17);
+            label4.Size = new Size(54, 20);
             label4.TabIndex = 23;
             label4.Text = "停止位";
             // 
@@ -374,9 +379,10 @@ namespace PortOSC
             // 
             label5.AutoSize = true;
             label5.ImeMode = ImeMode.NoControl;
-            label5.Location = new Point(12, 196);
+            label5.Location = new Point(15, 231);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(44, 17);
+            label5.Size = new Size(54, 20);
             label5.TabIndex = 24;
             label5.Text = "校验位";
             // 
@@ -384,9 +390,10 @@ namespace PortOSC
             // 
             label6.AutoSize = true;
             label6.ImeMode = ImeMode.NoControl;
-            label6.Location = new Point(684, 557);
+            label6.Location = new Point(879, 655);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(64, 17);
+            label6.Size = new Size(79, 20);
             label6.TabIndex = 25;
             label6.Text = "帧头(HEX)";
             // 
@@ -394,28 +401,29 @@ namespace PortOSC
             // 
             label7.AutoSize = true;
             label7.ImeMode = ImeMode.NoControl;
-            label7.Location = new Point(684, 588);
+            label7.Location = new Point(879, 692);
+            label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(64, 17);
+            label7.Size = new Size(79, 20);
             label7.TabIndex = 26;
             label7.Text = "帧尾(HEX)";
             // 
             // formPlot1
             // 
-            formPlot1.Location = new Point(661, 14);
-            formPlot1.Margin = new Padding(4, 3, 4, 3);
+            formPlot1.Location = new Point(850, 16);
+            formPlot1.Margin = new Padding(5, 4, 5, 4);
             formPlot1.Name = "formPlot1";
-            formPlot1.Size = new Size(701, 506);
+            formPlot1.Size = new Size(901, 595);
             formPlot1.TabIndex = 40;
             formPlot1.AxesChanged += FormsPlot1_AxesChanged;
             formPlot1.Load += FormsPlot1_Load;
             // 
             // SavePlot
             // 
-            SavePlot.Location = new Point(1259, 612);
-            SavePlot.Margin = new Padding(2, 3, 2, 3);
+            SavePlot.Location = new Point(1619, 720);
+            SavePlot.Margin = new Padding(3, 4, 3, 4);
             SavePlot.Name = "SavePlot";
-            SavePlot.Size = new Size(87, 28);
+            SavePlot.Size = new Size(112, 33);
             SavePlot.TabIndex = 45;
             SavePlot.Text = "保存数据";
             SavePlot.UseVisualStyleBackColor = true;
@@ -423,10 +431,10 @@ namespace PortOSC
             // 
             // ClearData
             // 
-            ClearData.Location = new Point(827, 512);
-            ClearData.Margin = new Padding(2, 3, 2, 3);
+            ClearData.Location = new Point(1063, 602);
+            ClearData.Margin = new Padding(3, 4, 3, 4);
             ClearData.Name = "ClearData";
-            ClearData.Size = new Size(153, 35);
+            ClearData.Size = new Size(197, 41);
             ClearData.TabIndex = 46;
             ClearData.Text = "复位显示";
             ClearData.UseVisualStyleBackColor = true;
@@ -435,40 +443,36 @@ namespace PortOSC
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(1007, 558);
-            label10.Margin = new Padding(2, 0, 2, 0);
+            label10.Location = new Point(1295, 656);
             label10.Name = "label10";
-            label10.Size = new Size(76, 17);
+            label10.Size = new Size(94, 20);
             label10.TabIndex = 58;
             label10.Text = "X轴显示范围";
             // 
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(1009, 588);
-            label11.Margin = new Padding(2, 0, 2, 0);
+            label11.Location = new Point(1297, 692);
             label11.Name = "label11";
-            label11.Size = new Size(75, 17);
+            label11.Size = new Size(93, 20);
             label11.TabIndex = 59;
             label11.Text = "Y轴显示范围";
             // 
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(1213, 587);
-            label12.Margin = new Padding(2, 0, 2, 0);
+            label12.Location = new Point(1560, 691);
             label12.Name = "label12";
-            label12.Size = new Size(75, 17);
+            label12.Size = new Size(93, 20);
             label12.TabIndex = 60;
             label12.Text = "Y轴刻度间隔";
             // 
             // label13
             // 
             label13.AutoSize = true;
-            label13.Location = new Point(1212, 557);
-            label13.Margin = new Padding(2, 0, 2, 0);
+            label13.Location = new Point(1558, 655);
             label13.Name = "label13";
-            label13.Size = new Size(76, 17);
+            label13.Size = new Size(94, 20);
             label13.TabIndex = 61;
             label13.Text = "X轴刻度间隔";
             // 
@@ -477,31 +481,31 @@ namespace PortOSC
             FileTypeText.DropDownStyle = ComboBoxStyle.DropDownList;
             FileTypeText.FormattingEnabled = true;
             FileTypeText.Items.AddRange(new object[] { ".png", ".jpg", ".bmp", ".tiff", ".csv" });
-            FileTypeText.Location = new Point(1167, 614);
-            FileTypeText.Margin = new Padding(2, 3, 2, 3);
+            FileTypeText.Location = new Point(1500, 722);
+            FileTypeText.Margin = new Padding(3, 4, 3, 4);
             FileTypeText.Name = "FileTypeText";
-            FileTypeText.Size = new Size(88, 25);
+            FileTypeText.Size = new Size(112, 28);
             FileTypeText.TabIndex = 64;
             // 
             // FileNameText
             // 
-            FileNameText.Location = new Point(752, 615);
-            FileNameText.Margin = new Padding(2, 3, 2, 3);
+            FileNameText.Location = new Point(967, 724);
+            FileNameText.Margin = new Padding(3, 4, 3, 4);
             FileNameText.Name = "FileNameText";
-            FileNameText.Size = new Size(412, 23);
+            FileNameText.Size = new Size(529, 27);
             FileNameText.TabIndex = 65;
             FileNameText.Text = "SaveData1";
             // 
             // ChannelLength
             // 
             ChannelLength.BackColor = SystemColors.ButtonHighlight;
-            ChannelLength.Location = new Point(1237, 517);
-            ChannelLength.Margin = new Padding(3, 4, 3, 4);
+            ChannelLength.Location = new Point(1590, 608);
+            ChannelLength.Margin = new Padding(4, 5, 4, 5);
             ChannelLength.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             ChannelLength.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             ChannelLength.Name = "ChannelLength";
             ChannelLength.ReadOnly = true;
-            ChannelLength.Size = new Size(66, 23);
+            ChannelLength.Size = new Size(85, 27);
             ChannelLength.TabIndex = 41;
             ChannelLength.Value = new decimal(new int[] { 2, 0, 0, 0 });
             // 
@@ -509,19 +513,19 @@ namespace PortOSC
             // 
             label9.AutoSize = true;
             label9.ImeMode = ImeMode.NoControl;
-            label9.Location = new Point(1189, 519);
+            label9.Location = new Point(1529, 611);
+            label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
-            label9.Size = new Size(44, 17);
+            label9.Size = new Size(54, 20);
             label9.TabIndex = 42;
             label9.Text = "通道数";
             // 
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(682, 618);
-            label14.Margin = new Padding(2, 0, 2, 0);
+            label14.Location = new Point(877, 727);
             label14.Name = "label14";
-            label14.Size = new Size(68, 17);
+            label14.Size = new Size(84, 20);
             label14.TabIndex = 66;
             label14.Text = "保存文件名";
             // 
@@ -529,20 +533,20 @@ namespace PortOSC
             // 
             flowLayoutPanel3.BorderStyle = BorderStyle.Fixed3D;
             flowLayoutPanel3.Controls.Add(EnableOsc);
-            flowLayoutPanel3.Location = new Point(701, 512);
-            flowLayoutPanel3.Margin = new Padding(3, 4, 3, 4);
+            flowLayoutPanel3.Location = new Point(901, 602);
+            flowLayoutPanel3.Margin = new Padding(4, 5, 4, 5);
             flowLayoutPanel3.Name = "flowLayoutPanel3";
-            flowLayoutPanel3.Size = new Size(96, 34);
+            flowLayoutPanel3.Size = new Size(122, 39);
             flowLayoutPanel3.TabIndex = 67;
             // 
             // StateMassageTextBox
             // 
             StateMassageTextBox.BackColor = SystemColors.ButtonHighlight;
-            StateMassageTextBox.Location = new Point(6, 459);
-            StateMassageTextBox.Margin = new Padding(2, 3, 2, 3);
+            StateMassageTextBox.Location = new Point(8, 540);
+            StateMassageTextBox.Margin = new Padding(3, 4, 3, 4);
             StateMassageTextBox.Name = "StateMassageTextBox";
             StateMassageTextBox.ReadOnly = true;
-            StateMassageTextBox.Size = new Size(217, 180);
+            StateMassageTextBox.Size = new Size(278, 211);
             StateMassageTextBox.TabIndex = 68;
             StateMassageTextBox.Text = "";
             // 
@@ -550,10 +554,10 @@ namespace PortOSC
             // 
             StopRec.AutoSize = true;
             StopRec.ImeMode = ImeMode.NoControl;
-            StopRec.Location = new Point(136, 237);
-            StopRec.Margin = new Padding(3, 4, 3, 4);
+            StopRec.Location = new Point(175, 279);
+            StopRec.Margin = new Padding(4, 5, 4, 5);
             StopRec.Name = "StopRec";
-            StopRec.Size = new Size(75, 21);
+            StopRec.Size = new Size(91, 24);
             StopRec.TabIndex = 10;
             StopRec.Text = "暂停显示";
             StopRec.UseVisualStyleBackColor = true;
@@ -562,10 +566,10 @@ namespace PortOSC
             // 
             RecNewLine.AutoSize = true;
             RecNewLine.ImeMode = ImeMode.NoControl;
-            RecNewLine.Location = new Point(3, 44);
-            RecNewLine.Margin = new Padding(3, 4, 3, 4);
+            RecNewLine.Location = new Point(4, 52);
+            RecNewLine.Margin = new Padding(4, 5, 4, 5);
             RecNewLine.Name = "RecNewLine";
-            RecNewLine.Size = new Size(75, 21);
+            RecNewLine.Size = new Size(91, 24);
             RecNewLine.TabIndex = 14;
             RecNewLine.Text = "接收换行";
             RecNewLine.UseVisualStyleBackColor = true;
@@ -574,10 +578,10 @@ namespace PortOSC
             // 
             ShowHex.AutoSize = true;
             ShowHex.ImeMode = ImeMode.NoControl;
-            ShowHex.Location = new Point(3, 23);
-            ShowHex.Margin = new Padding(3, 4, 3, 4);
+            ShowHex.Location = new Point(4, 27);
+            ShowHex.Margin = new Padding(4, 5, 4, 5);
             ShowHex.Name = "ShowHex";
-            ShowHex.Size = new Size(74, 21);
+            ShowHex.Size = new Size(90, 24);
             ShowHex.TabIndex = 12;
             ShowHex.Text = "HEX显示";
             ShowHex.UseVisualStyleBackColor = true;
@@ -587,10 +591,10 @@ namespace PortOSC
             ShowStr.AutoSize = true;
             ShowStr.Checked = true;
             ShowStr.ImeMode = ImeMode.NoControl;
-            ShowStr.Location = new Point(3, 3);
-            ShowStr.Margin = new Padding(3, 4, 3, 4);
+            ShowStr.Location = new Point(4, 4);
+            ShowStr.Margin = new Padding(4, 5, 4, 5);
             ShowStr.Name = "ShowStr";
-            ShowStr.Size = new Size(86, 21);
+            ShowStr.Size = new Size(105, 24);
             ShowStr.TabIndex = 13;
             ShowStr.TabStop = true;
             ShowStr.Text = "字符串显示";
@@ -602,10 +606,10 @@ namespace PortOSC
             panel1.Controls.Add(RecNewLine);
             panel1.Controls.Add(ShowStr);
             panel1.Controls.Add(ShowHex);
-            panel1.Location = new Point(20, 236);
-            panel1.Margin = new Padding(2, 3, 2, 3);
+            panel1.Location = new Point(26, 278);
+            panel1.Margin = new Padding(3, 4, 3, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(104, 69);
+            panel1.Size = new Size(133, 80);
             panel1.TabIndex = 0;
             // 
             // SerialPortPanel
@@ -613,10 +617,10 @@ namespace PortOSC
             SerialPortPanel.BorderStyle = BorderStyle.Fixed3D;
             SerialPortPanel.Controls.Add(CloseSerialPort);
             SerialPortPanel.Controls.Add(OpenSerialPort);
-            SerialPortPanel.Location = new Point(7, 54);
-            SerialPortPanel.Margin = new Padding(2, 3, 2, 3);
+            SerialPortPanel.Location = new Point(9, 64);
+            SerialPortPanel.Margin = new Padding(3, 4, 3, 4);
             SerialPortPanel.Name = "SerialPortPanel";
-            SerialPortPanel.Size = new Size(216, 171);
+            SerialPortPanel.Size = new Size(277, 200);
             SerialPortPanel.TabIndex = 72;
             // 
             // ServerTCP_Panel
@@ -631,20 +635,19 @@ namespace PortOSC
             ServerTCP_Panel.Controls.Add(ServerStateLight);
             ServerTCP_Panel.Controls.Add(ServerCloseButton);
             ServerTCP_Panel.Controls.Add(ServerStartButton);
-            ServerTCP_Panel.Location = new Point(235, 45);
-            ServerTCP_Panel.Margin = new Padding(2, 3, 2, 3);
+            ServerTCP_Panel.Location = new Point(302, 53);
+            ServerTCP_Panel.Margin = new Padding(3, 4, 3, 4);
             ServerTCP_Panel.Name = "ServerTCP_Panel";
-            ServerTCP_Panel.Size = new Size(216, 171);
+            ServerTCP_Panel.Size = new Size(277, 200);
             ServerTCP_Panel.TabIndex = 73;
             ServerTCP_Panel.Visible = false;
             // 
             // label19
             // 
             label19.AutoSize = true;
-            label19.Location = new Point(11, 6);
-            label19.Margin = new Padding(2, 0, 2, 0);
+            label19.Location = new Point(14, 7);
             label19.Name = "label19";
-            label19.Size = new Size(104, 17);
+            label19.Size = new Size(129, 20);
             label19.TabIndex = 88;
             label19.Text = "本地服务器地址：";
             // 
@@ -654,14 +657,14 @@ namespace PortOSC
             ServerPortBox.DoubleValue = 0D;
             ServerPortBox.FloatValue = 0F;
             ServerPortBox.IntValue = 60721;
-            ServerPortBox.Location = new Point(13, 62);
+            ServerPortBox.Location = new Point(17, 73);
             ServerPortBox.LongValue = 0L;
-            ServerPortBox.Margin = new Padding(2, 3, 2, 3);
+            ServerPortBox.Margin = new Padding(3, 4, 3, 4);
             ServerPortBox.MaxValue = "65535";
             ServerPortBox.MinValue = "0";
             ServerPortBox.Name = "ServerPortBox";
             ServerPortBox.NumberType = NumberType.Integer;
-            ServerPortBox.Size = new Size(94, 23);
+            ServerPortBox.Size = new Size(120, 27);
             ServerPortBox.TabIndex = 81;
             ServerPortBox.Text = "60721";
             // 
@@ -670,14 +673,14 @@ namespace PortOSC
             ServerIPBox3.DecimalPointNumber = 0;
             ServerIPBox3.DoubleValue = 0D;
             ServerIPBox3.FloatValue = 0F;
-            ServerIPBox3.Location = new Point(111, 27);
+            ServerIPBox3.Location = new Point(143, 32);
             ServerIPBox3.LongValue = 0L;
-            ServerIPBox3.Margin = new Padding(2, 3, 2, 3);
+            ServerIPBox3.Margin = new Padding(3, 4, 3, 4);
             ServerIPBox3.MaxValue = "255";
             ServerIPBox3.MinValue = "0";
             ServerIPBox3.Name = "ServerIPBox3";
             ServerIPBox3.NumberType = NumberType.Integer;
-            ServerIPBox3.Size = new Size(43, 23);
+            ServerIPBox3.Size = new Size(54, 27);
             ServerIPBox3.TabIndex = 80;
             ServerIPBox3.Text = "0";
             // 
@@ -687,14 +690,14 @@ namespace PortOSC
             ServerIPBox4.DoubleValue = 0D;
             ServerIPBox4.FloatValue = 0F;
             ServerIPBox4.IntValue = 1;
-            ServerIPBox4.Location = new Point(160, 27);
+            ServerIPBox4.Location = new Point(206, 32);
             ServerIPBox4.LongValue = 0L;
-            ServerIPBox4.Margin = new Padding(2, 3, 2, 3);
+            ServerIPBox4.Margin = new Padding(3, 4, 3, 4);
             ServerIPBox4.MaxValue = "255";
             ServerIPBox4.MinValue = "0";
             ServerIPBox4.Name = "ServerIPBox4";
             ServerIPBox4.NumberType = NumberType.Integer;
-            ServerIPBox4.Size = new Size(43, 23);
+            ServerIPBox4.Size = new Size(54, 27);
             ServerIPBox4.TabIndex = 79;
             ServerIPBox4.Text = "1";
             // 
@@ -703,14 +706,14 @@ namespace PortOSC
             ServerIPBox2.DecimalPointNumber = 0;
             ServerIPBox2.DoubleValue = 0D;
             ServerIPBox2.FloatValue = 0F;
-            ServerIPBox2.Location = new Point(62, 27);
+            ServerIPBox2.Location = new Point(80, 32);
             ServerIPBox2.LongValue = 0L;
-            ServerIPBox2.Margin = new Padding(2, 3, 2, 3);
+            ServerIPBox2.Margin = new Padding(3, 4, 3, 4);
             ServerIPBox2.MaxValue = "255";
             ServerIPBox2.MinValue = "0";
             ServerIPBox2.Name = "ServerIPBox2";
             ServerIPBox2.NumberType = NumberType.Integer;
-            ServerIPBox2.Size = new Size(43, 23);
+            ServerIPBox2.Size = new Size(54, 27);
             ServerIPBox2.TabIndex = 78;
             ServerIPBox2.Text = "0";
             // 
@@ -720,14 +723,14 @@ namespace PortOSC
             ServerIPBox1.DoubleValue = 0D;
             ServerIPBox1.FloatValue = 0F;
             ServerIPBox1.IntValue = 127;
-            ServerIPBox1.Location = new Point(13, 27);
+            ServerIPBox1.Location = new Point(17, 32);
             ServerIPBox1.LongValue = 0L;
-            ServerIPBox1.Margin = new Padding(2, 3, 2, 3);
+            ServerIPBox1.Margin = new Padding(3, 4, 3, 4);
             ServerIPBox1.MaxValue = "255";
             ServerIPBox1.MinValue = "0";
             ServerIPBox1.Name = "ServerIPBox1";
             ServerIPBox1.NumberType = NumberType.Integer;
-            ServerIPBox1.Size = new Size(43, 23);
+            ServerIPBox1.Size = new Size(54, 27);
             ServerIPBox1.TabIndex = 77;
             ServerIPBox1.Text = "127";
             // 
@@ -736,20 +739,20 @@ namespace PortOSC
             ServerStateLight.BackColor = Color.Red;
             ServerStateLight.BorderStyle = BorderStyle.FixedSingle;
             ServerStateLight.Enabled = false;
-            ServerStateLight.Location = new Point(149, 64);
-            ServerStateLight.Margin = new Padding(2, 3, 2, 3);
+            ServerStateLight.Location = new Point(192, 75);
+            ServerStateLight.Margin = new Padding(3, 4, 3, 4);
             ServerStateLight.Name = "ServerStateLight";
             ServerStateLight.ReadOnly = true;
-            ServerStateLight.Size = new Size(24, 23);
+            ServerStateLight.Size = new Size(30, 27);
             ServerStateLight.TabIndex = 76;
             // 
             // ServerCloseButton
             // 
             ServerCloseButton.Enabled = false;
-            ServerCloseButton.Location = new Point(110, 101);
-            ServerCloseButton.Margin = new Padding(2, 3, 2, 3);
+            ServerCloseButton.Location = new Point(141, 119);
+            ServerCloseButton.Margin = new Padding(3, 4, 3, 4);
             ServerCloseButton.Name = "ServerCloseButton";
-            ServerCloseButton.Size = new Size(93, 60);
+            ServerCloseButton.Size = new Size(120, 71);
             ServerCloseButton.TabIndex = 11;
             ServerCloseButton.Text = "关闭服务器";
             ServerCloseButton.UseVisualStyleBackColor = true;
@@ -757,10 +760,10 @@ namespace PortOSC
             // 
             // ServerStartButton
             // 
-            ServerStartButton.Location = new Point(13, 101);
-            ServerStartButton.Margin = new Padding(2, 3, 2, 3);
+            ServerStartButton.Location = new Point(17, 119);
+            ServerStartButton.Margin = new Padding(3, 4, 3, 4);
             ServerStartButton.Name = "ServerStartButton";
-            ServerStartButton.Size = new Size(93, 60);
+            ServerStartButton.Size = new Size(120, 71);
             ServerStartButton.TabIndex = 10;
             ServerStartButton.Text = "启动服务器";
             ServerStartButton.UseVisualStyleBackColor = true;
@@ -780,29 +783,28 @@ namespace PortOSC
             panel2.Controls.Add(TransmitServerIPBox4);
             panel2.Controls.Add(TransmitServerIPBox2);
             panel2.Controls.Add(TransmitServerIPBox1);
-            panel2.Location = new Point(7, 315);
-            panel2.Margin = new Padding(2, 3, 2, 3);
+            panel2.Location = new Point(9, 371);
+            panel2.Margin = new Padding(3, 4, 3, 4);
             panel2.Name = "panel2";
-            panel2.Size = new Size(216, 136);
+            panel2.Size = new Size(277, 159);
             panel2.TabIndex = 74;
             // 
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(9, 2);
-            label21.Margin = new Padding(2, 0, 2, 0);
+            label21.Location = new Point(12, 2);
             label21.Name = "label21";
-            label21.Size = new Size(104, 17);
+            label21.Size = new Size(129, 20);
             label21.TabIndex = 86;
             label21.Text = "转发服务器选项：";
             // 
             // StopReceiveCheckBox
             // 
             StopReceiveCheckBox.AutoSize = true;
-            StopReceiveCheckBox.Location = new Point(97, 20);
-            StopReceiveCheckBox.Margin = new Padding(2, 3, 2, 3);
+            StopReceiveCheckBox.Location = new Point(125, 24);
+            StopReceiveCheckBox.Margin = new Padding(3, 4, 3, 4);
             StopReceiveCheckBox.Name = "StopReceiveCheckBox";
-            StopReceiveCheckBox.Size = new Size(99, 21);
+            StopReceiveCheckBox.Size = new Size(121, 24);
             StopReceiveCheckBox.TabIndex = 85;
             StopReceiveCheckBox.Text = "暂停接收转发";
             StopReceiveCheckBox.UseVisualStyleBackColor = true;
@@ -810,10 +812,10 @@ namespace PortOSC
             // StopSendCheckBox
             // 
             StopSendCheckBox.AutoSize = true;
-            StopSendCheckBox.Location = new Point(14, 20);
-            StopSendCheckBox.Margin = new Padding(2, 3, 2, 3);
+            StopSendCheckBox.Location = new Point(18, 24);
+            StopSendCheckBox.Margin = new Padding(3, 4, 3, 4);
             StopSendCheckBox.Name = "StopSendCheckBox";
-            StopSendCheckBox.Size = new Size(75, 21);
+            StopSendCheckBox.Size = new Size(91, 24);
             StopSendCheckBox.TabIndex = 84;
             StopSendCheckBox.Text = "暂停发送";
             StopSendCheckBox.UseVisualStyleBackColor = true;
@@ -823,13 +825,13 @@ namespace PortOSC
             TransmitServerStateLight.BackColor = Color.Red;
             TransmitServerStateLight.BorderStyle = BorderStyle.FixedSingle;
             TransmitServerStateLight.Enabled = false;
-            TransmitServerStateLight.Location = new Point(142, 70);
-            TransmitServerStateLight.Margin = new Padding(2, 3, 2, 3);
+            TransmitServerStateLight.Location = new Point(183, 82);
+            TransmitServerStateLight.Margin = new Padding(3, 4, 3, 4);
             TransmitServerStateLight.MaxLength = 1;
             TransmitServerStateLight.Name = "TransmitServerStateLight";
             TransmitServerStateLight.ReadOnly = true;
             TransmitServerStateLight.ShortcutsEnabled = false;
-            TransmitServerStateLight.Size = new Size(24, 23);
+            TransmitServerStateLight.Size = new Size(30, 27);
             TransmitServerStateLight.TabIndex = 75;
             // 
             // TransmitServerPortBox
@@ -838,24 +840,24 @@ namespace PortOSC
             TransmitServerPortBox.DoubleValue = 0D;
             TransmitServerPortBox.FloatValue = 0F;
             TransmitServerPortBox.IntValue = 60721;
-            TransmitServerPortBox.Location = new Point(12, 68);
+            TransmitServerPortBox.Location = new Point(15, 80);
             TransmitServerPortBox.LongValue = 0L;
-            TransmitServerPortBox.Margin = new Padding(2, 3, 2, 3);
+            TransmitServerPortBox.Margin = new Padding(3, 4, 3, 4);
             TransmitServerPortBox.MaxValue = "65535";
             TransmitServerPortBox.MinValue = "0";
             TransmitServerPortBox.Name = "TransmitServerPortBox";
             TransmitServerPortBox.NumberType = NumberType.Integer;
-            TransmitServerPortBox.Size = new Size(90, 23);
+            TransmitServerPortBox.Size = new Size(115, 27);
             TransmitServerPortBox.TabIndex = 6;
             TransmitServerPortBox.Text = "60721";
             // 
             // TransmitServerCloseButton
             // 
             TransmitServerCloseButton.Enabled = false;
-            TransmitServerCloseButton.Location = new Point(109, 96);
-            TransmitServerCloseButton.Margin = new Padding(2, 3, 2, 3);
+            TransmitServerCloseButton.Location = new Point(140, 113);
+            TransmitServerCloseButton.Margin = new Padding(3, 4, 3, 4);
             TransmitServerCloseButton.Name = "TransmitServerCloseButton";
-            TransmitServerCloseButton.Size = new Size(92, 31);
+            TransmitServerCloseButton.Size = new Size(118, 36);
             TransmitServerCloseButton.TabIndex = 5;
             TransmitServerCloseButton.Text = "关闭服务器";
             TransmitServerCloseButton.UseVisualStyleBackColor = true;
@@ -863,10 +865,10 @@ namespace PortOSC
             // 
             // TransmitServerStartButton
             // 
-            TransmitServerStartButton.Location = new Point(9, 95);
-            TransmitServerStartButton.Margin = new Padding(2, 3, 2, 3);
+            TransmitServerStartButton.Location = new Point(12, 112);
+            TransmitServerStartButton.Margin = new Padding(3, 4, 3, 4);
             TransmitServerStartButton.Name = "TransmitServerStartButton";
-            TransmitServerStartButton.Size = new Size(92, 31);
+            TransmitServerStartButton.Size = new Size(118, 36);
             TransmitServerStartButton.TabIndex = 4;
             TransmitServerStartButton.Text = "启动服务器";
             TransmitServerStartButton.UseVisualStyleBackColor = true;
@@ -877,14 +879,14 @@ namespace PortOSC
             TransmitServerIPBox3.DecimalPointNumber = 0;
             TransmitServerIPBox3.DoubleValue = 0D;
             TransmitServerIPBox3.FloatValue = 0F;
-            TransmitServerIPBox3.Location = new Point(107, 42);
+            TransmitServerIPBox3.Location = new Point(138, 49);
             TransmitServerIPBox3.LongValue = 0L;
-            TransmitServerIPBox3.Margin = new Padding(2, 3, 2, 3);
+            TransmitServerIPBox3.Margin = new Padding(3, 4, 3, 4);
             TransmitServerIPBox3.MaxValue = "255";
             TransmitServerIPBox3.MinValue = "0";
             TransmitServerIPBox3.Name = "TransmitServerIPBox3";
             TransmitServerIPBox3.NumberType = NumberType.Integer;
-            TransmitServerIPBox3.Size = new Size(43, 23);
+            TransmitServerIPBox3.Size = new Size(54, 27);
             TransmitServerIPBox3.TabIndex = 3;
             TransmitServerIPBox3.Text = "0";
             // 
@@ -894,14 +896,14 @@ namespace PortOSC
             TransmitServerIPBox4.DoubleValue = 0D;
             TransmitServerIPBox4.FloatValue = 0F;
             TransmitServerIPBox4.IntValue = 1;
-            TransmitServerIPBox4.Location = new Point(156, 42);
+            TransmitServerIPBox4.Location = new Point(201, 49);
             TransmitServerIPBox4.LongValue = 0L;
-            TransmitServerIPBox4.Margin = new Padding(2, 3, 2, 3);
+            TransmitServerIPBox4.Margin = new Padding(3, 4, 3, 4);
             TransmitServerIPBox4.MaxValue = "255";
             TransmitServerIPBox4.MinValue = "0";
             TransmitServerIPBox4.Name = "TransmitServerIPBox4";
             TransmitServerIPBox4.NumberType = NumberType.Integer;
-            TransmitServerIPBox4.Size = new Size(43, 23);
+            TransmitServerIPBox4.Size = new Size(54, 27);
             TransmitServerIPBox4.TabIndex = 2;
             TransmitServerIPBox4.Text = "1";
             // 
@@ -910,14 +912,14 @@ namespace PortOSC
             TransmitServerIPBox2.DecimalPointNumber = 0;
             TransmitServerIPBox2.DoubleValue = 0D;
             TransmitServerIPBox2.FloatValue = 0F;
-            TransmitServerIPBox2.Location = new Point(60, 42);
+            TransmitServerIPBox2.Location = new Point(77, 49);
             TransmitServerIPBox2.LongValue = 0L;
-            TransmitServerIPBox2.Margin = new Padding(2, 3, 2, 3);
+            TransmitServerIPBox2.Margin = new Padding(3, 4, 3, 4);
             TransmitServerIPBox2.MaxValue = "255";
             TransmitServerIPBox2.MinValue = "0";
             TransmitServerIPBox2.Name = "TransmitServerIPBox2";
             TransmitServerIPBox2.NumberType = NumberType.Integer;
-            TransmitServerIPBox2.Size = new Size(43, 23);
+            TransmitServerIPBox2.Size = new Size(54, 27);
             TransmitServerIPBox2.TabIndex = 1;
             TransmitServerIPBox2.Text = "0";
             // 
@@ -927,14 +929,14 @@ namespace PortOSC
             TransmitServerIPBox1.DoubleValue = 0D;
             TransmitServerIPBox1.FloatValue = 0F;
             TransmitServerIPBox1.IntValue = 127;
-            TransmitServerIPBox1.Location = new Point(12, 42);
+            TransmitServerIPBox1.Location = new Point(15, 49);
             TransmitServerIPBox1.LongValue = 0L;
-            TransmitServerIPBox1.Margin = new Padding(2, 3, 2, 3);
+            TransmitServerIPBox1.Margin = new Padding(3, 4, 3, 4);
             TransmitServerIPBox1.MaxValue = "255";
             TransmitServerIPBox1.MinValue = "0";
             TransmitServerIPBox1.Name = "TransmitServerIPBox1";
             TransmitServerIPBox1.NumberType = NumberType.Integer;
-            TransmitServerIPBox1.Size = new Size(43, 23);
+            TransmitServerIPBox1.Size = new Size(54, 27);
             TransmitServerIPBox1.TabIndex = 0;
             TransmitServerIPBox1.Text = "127";
             // 
@@ -949,20 +951,19 @@ namespace PortOSC
             ClientTCP_Panel.Controls.Add(ClientIPBox1);
             ClientTCP_Panel.Controls.Add(ClientDisconnectButton);
             ClientTCP_Panel.Controls.Add(ClientConnectButton);
-            ClientTCP_Panel.Location = new Point(235, 223);
-            ClientTCP_Panel.Margin = new Padding(2, 3, 2, 3);
+            ClientTCP_Panel.Location = new Point(302, 262);
+            ClientTCP_Panel.Margin = new Padding(3, 4, 3, 4);
             ClientTCP_Panel.Name = "ClientTCP_Panel";
-            ClientTCP_Panel.Size = new Size(216, 171);
+            ClientTCP_Panel.Size = new Size(277, 200);
             ClientTCP_Panel.TabIndex = 75;
             ClientTCP_Panel.Visible = false;
             // 
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new Point(11, 7);
-            label20.Margin = new Padding(2, 0, 2, 0);
+            label20.Location = new Point(14, 8);
             label20.Name = "label20";
-            label20.Size = new Size(104, 17);
+            label20.Size = new Size(129, 20);
             label20.TabIndex = 85;
             label20.Text = "目标服务器地址：";
             // 
@@ -972,14 +973,14 @@ namespace PortOSC
             ClientPortBox.DoubleValue = 0D;
             ClientPortBox.FloatValue = 0F;
             ClientPortBox.IntValue = 60721;
-            ClientPortBox.Location = new Point(12, 60);
+            ClientPortBox.Location = new Point(15, 71);
             ClientPortBox.LongValue = 0L;
-            ClientPortBox.Margin = new Padding(2, 3, 2, 3);
+            ClientPortBox.Margin = new Padding(3, 4, 3, 4);
             ClientPortBox.MaxValue = "65535";
             ClientPortBox.MinValue = "0";
             ClientPortBox.Name = "ClientPortBox";
             ClientPortBox.NumberType = NumberType.Integer;
-            ClientPortBox.Size = new Size(94, 23);
+            ClientPortBox.Size = new Size(120, 27);
             ClientPortBox.TabIndex = 81;
             ClientPortBox.Text = "60721";
             // 
@@ -988,14 +989,14 @@ namespace PortOSC
             ClientIPBox3.DecimalPointNumber = 0;
             ClientIPBox3.DoubleValue = 0D;
             ClientIPBox3.FloatValue = 0F;
-            ClientIPBox3.Location = new Point(104, 27);
+            ClientIPBox3.Location = new Point(134, 32);
             ClientIPBox3.LongValue = 0L;
-            ClientIPBox3.Margin = new Padding(2, 3, 2, 3);
+            ClientIPBox3.Margin = new Padding(3, 4, 3, 4);
             ClientIPBox3.MaxValue = "255";
             ClientIPBox3.MinValue = "0";
             ClientIPBox3.Name = "ClientIPBox3";
             ClientIPBox3.NumberType = NumberType.Integer;
-            ClientIPBox3.Size = new Size(43, 23);
+            ClientIPBox3.Size = new Size(54, 27);
             ClientIPBox3.TabIndex = 80;
             ClientIPBox3.Text = "0";
             // 
@@ -1005,14 +1006,14 @@ namespace PortOSC
             ClientIPBox4.DoubleValue = 0D;
             ClientIPBox4.FloatValue = 0F;
             ClientIPBox4.IntValue = 1;
-            ClientIPBox4.Location = new Point(152, 27);
+            ClientIPBox4.Location = new Point(195, 32);
             ClientIPBox4.LongValue = 0L;
-            ClientIPBox4.Margin = new Padding(2, 3, 2, 3);
+            ClientIPBox4.Margin = new Padding(3, 4, 3, 4);
             ClientIPBox4.MaxValue = "255";
             ClientIPBox4.MinValue = "0";
             ClientIPBox4.Name = "ClientIPBox4";
             ClientIPBox4.NumberType = NumberType.Integer;
-            ClientIPBox4.Size = new Size(43, 23);
+            ClientIPBox4.Size = new Size(54, 27);
             ClientIPBox4.TabIndex = 79;
             ClientIPBox4.Text = "1";
             // 
@@ -1021,14 +1022,14 @@ namespace PortOSC
             ClientIPBox2.DecimalPointNumber = 0;
             ClientIPBox2.DoubleValue = 0D;
             ClientIPBox2.FloatValue = 0F;
-            ClientIPBox2.Location = new Point(58, 27);
+            ClientIPBox2.Location = new Point(75, 32);
             ClientIPBox2.LongValue = 0L;
-            ClientIPBox2.Margin = new Padding(2, 3, 2, 3);
+            ClientIPBox2.Margin = new Padding(3, 4, 3, 4);
             ClientIPBox2.MaxValue = "255";
             ClientIPBox2.MinValue = "0";
             ClientIPBox2.Name = "ClientIPBox2";
             ClientIPBox2.NumberType = NumberType.Integer;
-            ClientIPBox2.Size = new Size(43, 23);
+            ClientIPBox2.Size = new Size(54, 27);
             ClientIPBox2.TabIndex = 78;
             ClientIPBox2.Text = "0";
             // 
@@ -1038,24 +1039,24 @@ namespace PortOSC
             ClientIPBox1.DoubleValue = 0D;
             ClientIPBox1.FloatValue = 0F;
             ClientIPBox1.IntValue = 127;
-            ClientIPBox1.Location = new Point(11, 27);
+            ClientIPBox1.Location = new Point(14, 32);
             ClientIPBox1.LongValue = 0L;
-            ClientIPBox1.Margin = new Padding(2, 3, 2, 3);
+            ClientIPBox1.Margin = new Padding(3, 4, 3, 4);
             ClientIPBox1.MaxValue = "255";
             ClientIPBox1.MinValue = "0";
             ClientIPBox1.Name = "ClientIPBox1";
             ClientIPBox1.NumberType = NumberType.Integer;
-            ClientIPBox1.Size = new Size(43, 23);
+            ClientIPBox1.Size = new Size(54, 27);
             ClientIPBox1.TabIndex = 77;
             ClientIPBox1.Text = "127";
             // 
             // ClientDisconnectButton
             // 
             ClientDisconnectButton.Enabled = false;
-            ClientDisconnectButton.Location = new Point(107, 92);
-            ClientDisconnectButton.Margin = new Padding(2, 3, 2, 3);
+            ClientDisconnectButton.Location = new Point(138, 108);
+            ClientDisconnectButton.Margin = new Padding(3, 4, 3, 4);
             ClientDisconnectButton.Name = "ClientDisconnectButton";
-            ClientDisconnectButton.Size = new Size(93, 60);
+            ClientDisconnectButton.Size = new Size(120, 71);
             ClientDisconnectButton.TabIndex = 11;
             ClientDisconnectButton.Text = "断开";
             ClientDisconnectButton.UseVisualStyleBackColor = true;
@@ -1063,10 +1064,10 @@ namespace PortOSC
             // 
             // ClientConnectButton
             // 
-            ClientConnectButton.Location = new Point(8, 92);
-            ClientConnectButton.Margin = new Padding(2, 3, 2, 3);
+            ClientConnectButton.Location = new Point(10, 108);
+            ClientConnectButton.Margin = new Padding(3, 4, 3, 4);
             ClientConnectButton.Name = "ClientConnectButton";
-            ClientConnectButton.Size = new Size(93, 60);
+            ClientConnectButton.Size = new Size(120, 71);
             ClientConnectButton.TabIndex = 10;
             ClientConnectButton.Text = "连接";
             ClientConnectButton.UseVisualStyleBackColor = true;
@@ -1089,40 +1090,37 @@ namespace PortOSC
             UDP_Panel.Controls.Add(UdpLocalIPBox1);
             UDP_Panel.Controls.Add(UDPUnbindButton);
             UDP_Panel.Controls.Add(UDPBindButton);
-            UDP_Panel.Location = new Point(455, 45);
-            UDP_Panel.Margin = new Padding(2, 3, 2, 3);
+            UDP_Panel.Location = new Point(585, 53);
+            UDP_Panel.Margin = new Padding(3, 4, 3, 4);
             UDP_Panel.Name = "UDP_Panel";
-            UDP_Panel.Size = new Size(216, 171);
+            UDP_Panel.Size = new Size(277, 200);
             UDP_Panel.TabIndex = 82;
             UDP_Panel.Visible = false;
             // 
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(11, 92);
-            label17.Margin = new Padding(2, 0, 2, 0);
+            label17.Location = new Point(14, 108);
             label17.Name = "label17";
-            label17.Size = new Size(32, 17);
+            label17.Size = new Size(39, 20);
             label17.TabIndex = 89;
             label17.Text = "端口";
             // 
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(3, 60);
-            label16.Margin = new Padding(2, 0, 2, 0);
+            label16.Location = new Point(4, 71);
             label16.Name = "label16";
-            label16.Size = new Size(43, 17);
+            label16.Size = new Size(52, 20);
             label16.TabIndex = 88;
             label16.Text = "目标IP";
             // 
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(3, 21);
-            label15.Margin = new Padding(2, 0, 2, 0);
+            label15.Location = new Point(4, 25);
             label15.Name = "label15";
-            label15.Size = new Size(43, 17);
+            label15.Size = new Size(52, 20);
             label15.TabIndex = 87;
             label15.Text = "本地IP";
             // 
@@ -1132,14 +1130,14 @@ namespace PortOSC
             UDPPortBox.DoubleValue = 0D;
             UDPPortBox.FloatValue = 0F;
             UDPPortBox.IntValue = 60721;
-            UDPPortBox.Location = new Point(53, 88);
+            UDPPortBox.Location = new Point(68, 104);
             UDPPortBox.LongValue = 0L;
-            UDPPortBox.Margin = new Padding(2, 3, 2, 3);
+            UDPPortBox.Margin = new Padding(3, 4, 3, 4);
             UDPPortBox.MaxValue = "65535";
             UDPPortBox.MinValue = "0";
             UDPPortBox.Name = "UDPPortBox";
             UDPPortBox.NumberType = NumberType.Integer;
-            UDPPortBox.Size = new Size(72, 23);
+            UDPPortBox.Size = new Size(91, 27);
             UDPPortBox.TabIndex = 86;
             UDPPortBox.Text = "60721";
             // 
@@ -1148,14 +1146,14 @@ namespace PortOSC
             UdpTargetIPBox3.DecimalPointNumber = 0;
             UdpTargetIPBox3.DoubleValue = 0D;
             UdpTargetIPBox3.FloatValue = 0F;
-            UdpTargetIPBox3.Location = new Point(129, 54);
+            UdpTargetIPBox3.Location = new Point(166, 64);
             UdpTargetIPBox3.LongValue = 0L;
-            UdpTargetIPBox3.Margin = new Padding(2, 3, 2, 3);
+            UdpTargetIPBox3.Margin = new Padding(3, 4, 3, 4);
             UdpTargetIPBox3.MaxValue = "255";
             UdpTargetIPBox3.MinValue = "0";
             UdpTargetIPBox3.Name = "UdpTargetIPBox3";
             UdpTargetIPBox3.NumberType = NumberType.Integer;
-            UdpTargetIPBox3.Size = new Size(34, 23);
+            UdpTargetIPBox3.Size = new Size(43, 27);
             UdpTargetIPBox3.TabIndex = 85;
             UdpTargetIPBox3.Text = "0";
             // 
@@ -1165,14 +1163,14 @@ namespace PortOSC
             UdpTargetIPBox4.DoubleValue = 0D;
             UdpTargetIPBox4.FloatValue = 0F;
             UdpTargetIPBox4.IntValue = 1;
-            UdpTargetIPBox4.Location = new Point(168, 54);
+            UdpTargetIPBox4.Location = new Point(216, 64);
             UdpTargetIPBox4.LongValue = 0L;
-            UdpTargetIPBox4.Margin = new Padding(2, 3, 2, 3);
+            UdpTargetIPBox4.Margin = new Padding(3, 4, 3, 4);
             UdpTargetIPBox4.MaxValue = "255";
             UdpTargetIPBox4.MinValue = "0";
             UdpTargetIPBox4.Name = "UdpTargetIPBox4";
             UdpTargetIPBox4.NumberType = NumberType.Integer;
-            UdpTargetIPBox4.Size = new Size(34, 23);
+            UdpTargetIPBox4.Size = new Size(43, 27);
             UdpTargetIPBox4.TabIndex = 84;
             UdpTargetIPBox4.Text = "1";
             // 
@@ -1181,14 +1179,14 @@ namespace PortOSC
             UdpTargetIPBox2.DecimalPointNumber = 0;
             UdpTargetIPBox2.DoubleValue = 0D;
             UdpTargetIPBox2.FloatValue = 0F;
-            UdpTargetIPBox2.Location = new Point(91, 54);
+            UdpTargetIPBox2.Location = new Point(117, 64);
             UdpTargetIPBox2.LongValue = 0L;
-            UdpTargetIPBox2.Margin = new Padding(2, 3, 2, 3);
+            UdpTargetIPBox2.Margin = new Padding(3, 4, 3, 4);
             UdpTargetIPBox2.MaxValue = "255";
             UdpTargetIPBox2.MinValue = "0";
             UdpTargetIPBox2.Name = "UdpTargetIPBox2";
             UdpTargetIPBox2.NumberType = NumberType.Integer;
-            UdpTargetIPBox2.Size = new Size(34, 23);
+            UdpTargetIPBox2.Size = new Size(43, 27);
             UdpTargetIPBox2.TabIndex = 83;
             UdpTargetIPBox2.Text = "0";
             // 
@@ -1198,14 +1196,14 @@ namespace PortOSC
             UdpTargetIPBox1.DoubleValue = 0D;
             UdpTargetIPBox1.FloatValue = 0F;
             UdpTargetIPBox1.IntValue = 127;
-            UdpTargetIPBox1.Location = new Point(53, 54);
+            UdpTargetIPBox1.Location = new Point(68, 64);
             UdpTargetIPBox1.LongValue = 0L;
-            UdpTargetIPBox1.Margin = new Padding(2, 3, 2, 3);
+            UdpTargetIPBox1.Margin = new Padding(3, 4, 3, 4);
             UdpTargetIPBox1.MaxValue = "255";
             UdpTargetIPBox1.MinValue = "0";
             UdpTargetIPBox1.Name = "UdpTargetIPBox1";
             UdpTargetIPBox1.NumberType = NumberType.Integer;
-            UdpTargetIPBox1.Size = new Size(34, 23);
+            UdpTargetIPBox1.Size = new Size(43, 27);
             UdpTargetIPBox1.TabIndex = 82;
             UdpTargetIPBox1.Text = "127";
             // 
@@ -1214,14 +1212,14 @@ namespace PortOSC
             UdpLocalIPBox3.DecimalPointNumber = 0;
             UdpLocalIPBox3.DoubleValue = 0D;
             UdpLocalIPBox3.FloatValue = 0F;
-            UdpLocalIPBox3.Location = new Point(129, 18);
+            UdpLocalIPBox3.Location = new Point(166, 21);
             UdpLocalIPBox3.LongValue = 0L;
-            UdpLocalIPBox3.Margin = new Padding(2, 3, 2, 3);
+            UdpLocalIPBox3.Margin = new Padding(3, 4, 3, 4);
             UdpLocalIPBox3.MaxValue = "255";
             UdpLocalIPBox3.MinValue = "0";
             UdpLocalIPBox3.Name = "UdpLocalIPBox3";
             UdpLocalIPBox3.NumberType = NumberType.Integer;
-            UdpLocalIPBox3.Size = new Size(34, 23);
+            UdpLocalIPBox3.Size = new Size(43, 27);
             UdpLocalIPBox3.TabIndex = 80;
             UdpLocalIPBox3.Text = "0";
             // 
@@ -1231,14 +1229,14 @@ namespace PortOSC
             UdpLocalIPBox4.DoubleValue = 0D;
             UdpLocalIPBox4.FloatValue = 0F;
             UdpLocalIPBox4.IntValue = 1;
-            UdpLocalIPBox4.Location = new Point(168, 18);
+            UdpLocalIPBox4.Location = new Point(216, 21);
             UdpLocalIPBox4.LongValue = 0L;
-            UdpLocalIPBox4.Margin = new Padding(2, 3, 2, 3);
+            UdpLocalIPBox4.Margin = new Padding(3, 4, 3, 4);
             UdpLocalIPBox4.MaxValue = "255";
             UdpLocalIPBox4.MinValue = "0";
             UdpLocalIPBox4.Name = "UdpLocalIPBox4";
             UdpLocalIPBox4.NumberType = NumberType.Integer;
-            UdpLocalIPBox4.Size = new Size(34, 23);
+            UdpLocalIPBox4.Size = new Size(43, 27);
             UdpLocalIPBox4.TabIndex = 79;
             UdpLocalIPBox4.Text = "1";
             // 
@@ -1247,14 +1245,14 @@ namespace PortOSC
             UdpLocalIPBox2.DecimalPointNumber = 0;
             UdpLocalIPBox2.DoubleValue = 0D;
             UdpLocalIPBox2.FloatValue = 0F;
-            UdpLocalIPBox2.Location = new Point(91, 18);
+            UdpLocalIPBox2.Location = new Point(117, 21);
             UdpLocalIPBox2.LongValue = 0L;
-            UdpLocalIPBox2.Margin = new Padding(2, 3, 2, 3);
+            UdpLocalIPBox2.Margin = new Padding(3, 4, 3, 4);
             UdpLocalIPBox2.MaxValue = "255";
             UdpLocalIPBox2.MinValue = "0";
             UdpLocalIPBox2.Name = "UdpLocalIPBox2";
             UdpLocalIPBox2.NumberType = NumberType.Integer;
-            UdpLocalIPBox2.Size = new Size(34, 23);
+            UdpLocalIPBox2.Size = new Size(43, 27);
             UdpLocalIPBox2.TabIndex = 78;
             UdpLocalIPBox2.Text = "0";
             // 
@@ -1264,24 +1262,24 @@ namespace PortOSC
             UdpLocalIPBox1.DoubleValue = 0D;
             UdpLocalIPBox1.FloatValue = 0F;
             UdpLocalIPBox1.IntValue = 127;
-            UdpLocalIPBox1.Location = new Point(53, 18);
+            UdpLocalIPBox1.Location = new Point(68, 21);
             UdpLocalIPBox1.LongValue = 0L;
-            UdpLocalIPBox1.Margin = new Padding(2, 3, 2, 3);
+            UdpLocalIPBox1.Margin = new Padding(3, 4, 3, 4);
             UdpLocalIPBox1.MaxValue = "255";
             UdpLocalIPBox1.MinValue = "0";
             UdpLocalIPBox1.Name = "UdpLocalIPBox1";
             UdpLocalIPBox1.NumberType = NumberType.Integer;
-            UdpLocalIPBox1.Size = new Size(34, 23);
+            UdpLocalIPBox1.Size = new Size(43, 27);
             UdpLocalIPBox1.TabIndex = 77;
             UdpLocalIPBox1.Text = "127";
             // 
             // UDPUnbindButton
             // 
             UDPUnbindButton.Enabled = false;
-            UDPUnbindButton.Location = new Point(113, 122);
-            UDPUnbindButton.Margin = new Padding(2, 3, 2, 3);
+            UDPUnbindButton.Location = new Point(145, 144);
+            UDPUnbindButton.Margin = new Padding(3, 4, 3, 4);
             UDPUnbindButton.Name = "UDPUnbindButton";
-            UDPUnbindButton.Size = new Size(86, 35);
+            UDPUnbindButton.Size = new Size(111, 41);
             UDPUnbindButton.TabIndex = 11;
             UDPUnbindButton.Text = "解绑";
             UDPUnbindButton.UseVisualStyleBackColor = true;
@@ -1289,10 +1287,10 @@ namespace PortOSC
             // 
             // UDPBindButton
             // 
-            UDPBindButton.Location = new Point(19, 122);
-            UDPBindButton.Margin = new Padding(2, 3, 2, 3);
+            UDPBindButton.Location = new Point(24, 144);
+            UDPBindButton.Margin = new Padding(3, 4, 3, 4);
             UDPBindButton.Name = "UDPBindButton";
-            UDPBindButton.Size = new Size(86, 35);
+            UDPBindButton.Size = new Size(111, 41);
             UDPBindButton.TabIndex = 10;
             UDPBindButton.Text = "绑定";
             UDPBindButton.UseVisualStyleBackColor = true;
@@ -1304,8 +1302,8 @@ namespace PortOSC
             menuStrip1.Items.AddRange(new ToolStripItem[] { ChooseDataInput, ToolsToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Padding = new Padding(5, 3, 0, 3);
-            menuStrip1.Size = new Size(1362, 27);
+            menuStrip1.Padding = new Padding(6, 4, 0, 4);
+            menuStrip1.Size = new Size(1751, 32);
             menuStrip1.TabIndex = 83;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -1313,7 +1311,7 @@ namespace PortOSC
             // 
             ChooseDataInput.DropDownItems.AddRange(new ToolStripItem[] { SerialPortToolStripMenuItem, TCPserverToolStripMenuItem, TCPClientToolStripMenuItem, UDPToolStripMenuItem });
             ChooseDataInput.Name = "ChooseDataInput";
-            ChooseDataInput.Size = new Size(56, 21);
+            ChooseDataInput.Size = new Size(68, 24);
             ChooseDataInput.Text = "数据源";
             // 
             // SerialPortToolStripMenuItem
@@ -1321,83 +1319,88 @@ namespace PortOSC
             SerialPortToolStripMenuItem.Checked = true;
             SerialPortToolStripMenuItem.CheckState = CheckState.Checked;
             SerialPortToolStripMenuItem.Name = "SerialPortToolStripMenuItem";
-            SerialPortToolStripMenuItem.Size = new Size(143, 22);
+            SerialPortToolStripMenuItem.Size = new Size(177, 26);
             SerialPortToolStripMenuItem.Text = "SerialPort";
             SerialPortToolStripMenuItem.Click += SerialPortToolStripMenuItem_Click;
             // 
             // TCPserverToolStripMenuItem
             // 
             TCPserverToolStripMenuItem.Name = "TCPserverToolStripMenuItem";
-            TCPserverToolStripMenuItem.Size = new Size(143, 22);
+            TCPserverToolStripMenuItem.Size = new Size(177, 26);
             TCPserverToolStripMenuItem.Text = "TCP(Server)";
             TCPserverToolStripMenuItem.Click += TCPserverToolStripMenuItem_Click;
             // 
             // TCPClientToolStripMenuItem
             // 
             TCPClientToolStripMenuItem.Name = "TCPClientToolStripMenuItem";
-            TCPClientToolStripMenuItem.Size = new Size(143, 22);
+            TCPClientToolStripMenuItem.Size = new Size(177, 26);
             TCPClientToolStripMenuItem.Text = "TCP(Client)";
             TCPClientToolStripMenuItem.Click += TCPClientToolStripMenuItem_Click;
             // 
             // UDPToolStripMenuItem
             // 
             UDPToolStripMenuItem.Name = "UDPToolStripMenuItem";
-            UDPToolStripMenuItem.Size = new Size(143, 22);
+            UDPToolStripMenuItem.Size = new Size(177, 26);
             UDPToolStripMenuItem.Text = "UDP";
             UDPToolStripMenuItem.Click += UDPToolStripMenuItem_Click;
             // 
             // ToolsToolStripMenuItem
             // 
-            ToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { OpenHexToCharTool, ReadConfig, SaveConfigToAnother, OpenHelp });
+            ToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { OpenHexToCharTool, OpenSendStringLibraryTool, ReadConfig, SaveConfigToAnother, OpenHelp });
             ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem";
-            ToolsToolStripMenuItem.Size = new Size(44, 21);
+            ToolsToolStripMenuItem.Size = new Size(53, 24);
             ToolsToolStripMenuItem.Text = "工具";
             // 
             // OpenHexToCharTool
             // 
             OpenHexToCharTool.Name = "OpenHexToCharTool";
-            OpenHexToCharTool.Size = new Size(198, 22);
-            OpenHexToCharTool.Text = "打开CHAR-HEX小工具";
+            OpenHexToCharTool.Size = new Size(231, 26);
+            OpenHexToCharTool.Text = "打开CHAR-HEX工具";
             OpenHexToCharTool.Click += OpenHexToCharTool_Click;
+            // 
+            // OpenSendStringLibraryTool
+            // 
+            OpenSendStringLibraryTool.Name = "OpenSendStringLibraryTool";
+            OpenSendStringLibraryTool.Size = new Size(231, 26);
+            OpenSendStringLibraryTool.Text = "打开字符串库工具";
+            OpenSendStringLibraryTool.Click += OpenSendStringLibraryTool_Click;
             // 
             // ReadConfig
             // 
             ReadConfig.Name = "ReadConfig";
-            ReadConfig.Size = new Size(198, 22);
+            ReadConfig.Size = new Size(231, 26);
             ReadConfig.Text = "读取配置文件";
             ReadConfig.Click += ReadConfig_Click;
             // 
             // SaveConfigToAnother
             // 
             SaveConfigToAnother.Name = "SaveConfigToAnother";
-            SaveConfigToAnother.Size = new Size(198, 22);
+            SaveConfigToAnother.Size = new Size(231, 26);
             SaveConfigToAnother.Text = "配置文件另存为";
             SaveConfigToAnother.Click += SaveConfigToAnother_Click;
             // 
             // OpenHelp
             // 
             OpenHelp.Name = "OpenHelp";
-            OpenHelp.Size = new Size(198, 22);
+            OpenHelp.Size = new Size(231, 26);
             OpenHelp.Text = "帮助";
             OpenHelp.Click += OpenHelp_Click;
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(7, 31);
-            label8.Margin = new Padding(2, 0, 2, 0);
+            label8.Location = new Point(9, 36);
             label8.Name = "label8";
-            label8.Size = new Size(80, 17);
+            label8.Size = new Size(99, 20);
             label8.TabIndex = 84;
             label8.Text = "当前数据源：";
             // 
             // ReceiveModeSelectText
             // 
             ReceiveModeSelectText.AutoSize = true;
-            ReceiveModeSelectText.Location = new Point(75, 31);
-            ReceiveModeSelectText.Margin = new Padding(2, 0, 2, 0);
+            ReceiveModeSelectText.Location = new Point(96, 36);
             ReceiveModeSelectText.Name = "ReceiveModeSelectText";
-            ReceiveModeSelectText.Size = new Size(64, 17);
+            ReceiveModeSelectText.Size = new Size(80, 20);
             ReceiveModeSelectText.TabIndex = 85;
             ReceiveModeSelectText.Text = "SerialPort";
             // 
@@ -1405,20 +1408,21 @@ namespace PortOSC
             // 
             label18.AutoSize = true;
             label18.ImeMode = ImeMode.NoControl;
-            label18.Location = new Point(1013, 519);
+            label18.Location = new Point(1302, 611);
+            label18.Margin = new Padding(4, 0, 4, 0);
             label18.Name = "label18";
-            label18.Size = new Size(92, 17);
+            label18.Size = new Size(114, 20);
             label18.TabIndex = 86;
             label18.Text = "缓冲区附加长度";
             // 
             // AdditionalBufferLengthBox
             // 
             AdditionalBufferLengthBox.BackColor = SystemColors.ButtonHighlight;
-            AdditionalBufferLengthBox.Location = new Point(1108, 517);
-            AdditionalBufferLengthBox.Margin = new Padding(3, 4, 3, 4);
+            AdditionalBufferLengthBox.Location = new Point(1425, 608);
+            AdditionalBufferLengthBox.Margin = new Padding(4, 5, 4, 5);
             AdditionalBufferLengthBox.Maximum = new decimal(new int[] { 65535, 0, 0, 0 });
             AdditionalBufferLengthBox.Name = "AdditionalBufferLengthBox";
-            AdditionalBufferLengthBox.Size = new Size(66, 23);
+            AdditionalBufferLengthBox.Size = new Size(85, 27);
             AdditionalBufferLengthBox.TabIndex = 87;
             // 
             // XStep
@@ -1426,14 +1430,14 @@ namespace PortOSC
             XStep.DecimalPointNumber = 2;
             XStep.DoubleValue = 1D;
             XStep.FloatValue = 0F;
-            XStep.Location = new Point(1288, 554);
+            XStep.Location = new Point(1656, 652);
             XStep.LongValue = 0L;
-            XStep.Margin = new Padding(2, 3, 2, 3);
+            XStep.Margin = new Padding(3, 4, 3, 4);
             XStep.MaxValue = "";
             XStep.MinValue = "";
             XStep.Name = "XStep";
             XStep.NumberType = NumberType.Double;
-            XStep.Size = new Size(58, 23);
+            XStep.Size = new Size(73, 27);
             XStep.TabIndex = 63;
             XStep.Text = "1.00";
             XStep.Leave += XStep_Leave;
@@ -1443,14 +1447,14 @@ namespace PortOSC
             YStep.DecimalPointNumber = 2;
             YStep.DoubleValue = 1D;
             YStep.FloatValue = 0F;
-            YStep.Location = new Point(1288, 585);
+            YStep.Location = new Point(1656, 688);
             YStep.LongValue = 0L;
-            YStep.Margin = new Padding(2, 3, 2, 3);
+            YStep.Margin = new Padding(3, 4, 3, 4);
             YStep.MaxValue = "";
             YStep.MinValue = "";
             YStep.Name = "YStep";
             YStep.NumberType = NumberType.Double;
-            YStep.Size = new Size(58, 23);
+            YStep.Size = new Size(73, 27);
             YStep.TabIndex = 62;
             YStep.Text = "1.00";
             YStep.Leave += YStep_Leave;
@@ -1460,14 +1464,14 @@ namespace PortOSC
             RightLimit.DecimalPointNumber = 2;
             RightLimit.DoubleValue = 50D;
             RightLimit.FloatValue = 0F;
-            RightLimit.Location = new Point(1148, 554);
+            RightLimit.Location = new Point(1476, 652);
             RightLimit.LongValue = 0L;
-            RightLimit.Margin = new Padding(2, 3, 2, 3);
+            RightLimit.Margin = new Padding(3, 4, 3, 4);
             RightLimit.MaxValue = "";
             RightLimit.MinValue = "";
             RightLimit.Name = "RightLimit";
             RightLimit.NumberType = NumberType.Double;
-            RightLimit.Size = new Size(58, 23);
+            RightLimit.Size = new Size(73, 27);
             RightLimit.TabIndex = 57;
             RightLimit.Text = "50.00";
             RightLimit.Leave += RightLimit_Leave;
@@ -1477,14 +1481,14 @@ namespace PortOSC
             LeftLimit.DecimalPointNumber = 2;
             LeftLimit.DoubleValue = 0D;
             LeftLimit.FloatValue = 0F;
-            LeftLimit.Location = new Point(1085, 554);
+            LeftLimit.Location = new Point(1395, 652);
             LeftLimit.LongValue = 0L;
-            LeftLimit.Margin = new Padding(2, 3, 2, 3);
+            LeftLimit.Margin = new Padding(3, 4, 3, 4);
             LeftLimit.MaxValue = "";
             LeftLimit.MinValue = "";
             LeftLimit.Name = "LeftLimit";
             LeftLimit.NumberType = NumberType.Double;
-            LeftLimit.Size = new Size(58, 23);
+            LeftLimit.Size = new Size(73, 27);
             LeftLimit.TabIndex = 56;
             LeftLimit.Text = "0.00";
             LeftLimit.Leave += LeftLimit_Leave;
@@ -1494,14 +1498,14 @@ namespace PortOSC
             ButtomLimit.DecimalPointNumber = 2;
             ButtomLimit.DoubleValue = -5D;
             ButtomLimit.FloatValue = 0F;
-            ButtomLimit.Location = new Point(1086, 585);
+            ButtomLimit.Location = new Point(1396, 688);
             ButtomLimit.LongValue = 0L;
-            ButtomLimit.Margin = new Padding(2, 3, 2, 3);
+            ButtomLimit.Margin = new Padding(3, 4, 3, 4);
             ButtomLimit.MaxValue = "";
             ButtomLimit.MinValue = "";
             ButtomLimit.Name = "ButtomLimit";
             ButtomLimit.NumberType = NumberType.Double;
-            ButtomLimit.Size = new Size(58, 23);
+            ButtomLimit.Size = new Size(73, 27);
             ButtomLimit.TabIndex = 55;
             ButtomLimit.Text = "-5.00";
             ButtomLimit.Leave += ButtomLimit_Leave;
@@ -1511,24 +1515,24 @@ namespace PortOSC
             TopLimit.DecimalPointNumber = 2;
             TopLimit.DoubleValue = 5D;
             TopLimit.FloatValue = 0F;
-            TopLimit.Location = new Point(1148, 585);
+            TopLimit.Location = new Point(1476, 688);
             TopLimit.LongValue = 0L;
-            TopLimit.Margin = new Padding(2, 3, 2, 3);
+            TopLimit.Margin = new Padding(3, 4, 3, 4);
             TopLimit.MaxValue = "";
             TopLimit.MinValue = "";
             TopLimit.Name = "TopLimit";
             TopLimit.NumberType = NumberType.Double;
-            TopLimit.Size = new Size(58, 23);
+            TopLimit.Size = new Size(73, 27);
             TopLimit.TabIndex = 54;
             TopLimit.Text = "5.00";
             TopLimit.Leave += TopLimit_Leave;
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(1362, 646);
+            ClientSize = new Size(1751, 760);
             Controls.Add(menuStrip1);
             Controls.Add(AdditionalBufferLengthBox);
             Controls.Add(label18);
@@ -1581,7 +1585,7 @@ namespace PortOSC
             Controls.Add(flowLayoutPanel3);
             Controls.Add(formPlot1);
             Controls.Add(SerialPortPanel);
-            Margin = new Padding(3, 4, 3, 4);
+            Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
             Name = "Form1";
             RightToLeftLayout = true;
@@ -1705,6 +1709,7 @@ namespace PortOSC
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ToolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenHexToCharTool;
+        private System.Windows.Forms.ToolStripMenuItem OpenSendStringLibraryTool;
         private System.Windows.Forms.ToolStripMenuItem ReadConfig;
         private System.Windows.Forms.ToolStripMenuItem SaveConfigToAnother;
         private System.Windows.Forms.ToolStripMenuItem OpenHelp;

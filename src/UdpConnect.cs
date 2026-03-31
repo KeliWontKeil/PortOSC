@@ -31,6 +31,28 @@ namespace UdpConnect
             remove => ReceiveMessage -= value;
         }
 
+        private void ResetSocketState()
+        {
+            _Receive_cts?.Cancel();
+            _Receive_cts?.Dispose();
+            _Receive_cts = null;
+
+            if (_udpSocket != null)
+            {
+                _udpSocket.Dispose();
+                _udpSocket = null;
+            }
+
+            ReceiveTaskHandle = null;
+            UdpState.Value = false;
+        }
+
+        private void StartReceiveLoop()
+        {
+            _Receive_cts = new CancellationTokenSource();
+            ReceiveTaskHandle = Task.Run(() => ReceiveTask(_Receive_cts.Token));
+        }
+
         public SimpleUdpEndpoint(string? IP = default, int Port = default)
         {
             UdpState = new ChangeEventValue<bool>(false);
@@ -44,25 +66,29 @@ namespace UdpConnect
         {
             if (_udpSocket != null)
                 throw new InvalidOperationException("UDP already started.");
+
             if (IP != null)
                 LocalIPAddress = IP;
+
             if (Port != 0)
                 LocalPort = Port;
 
-            _udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             if (LocalIPAddress == null || LocalPort == 0)
             {
                 throw new InvalidOperationException("Local IP address or port is not set.");
             }
+
+            _udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             _udpSocket.Bind(new IPEndPoint(IPAddress.Parse(LocalIPAddress), LocalPort));
+
             if (_udpSocket.LocalEndPoint == null)
             {
                 throw new InvalidOperationException("Failed to bind UDP socket.");
             }
-            LocalEndPoint = (IPEndPoint)_udpSocket.LocalEndPoint;
-            _Receive_cts = new CancellationTokenSource();
 
-            ReceiveTaskHandle = Task.Run(() => ReceiveTask(_Receive_cts.Token));
+            LocalEndPoint = (IPEndPoint)_udpSocket.LocalEndPoint;
+
+            StartReceiveLoop();
             UdpState.Value = true;
         }
 
@@ -73,19 +99,17 @@ namespace UdpConnect
 
             _Receive_cts?.Cancel();
             _udpSocket.Close();
-            _udpSocket.Dispose();
-            _udpSocket = null;
 
             if (ReceiveTaskHandle != null)
+            {
                 await ReceiveTaskHandle;
-            UdpState.Value = false;
-            ReceiveTaskHandle = null;
-            _Receive_cts?.Dispose();
+            }
+
+            ResetSocketState();
         }
         public void Dispose()
         {
-            _Receive_cts?.Cancel();
-            _udpSocket?.Dispose();
+            ResetSocketState();
         }
 
         public void SetRemote(string IP, int Port)
@@ -109,20 +133,33 @@ namespace UdpConnect
                         SocketFlags.None,
                         remoteEP);
 
-                    int ReceiveDataLength = result.ReceivedBytes;
-                    EndPoint sender = result.RemoteEndPoint;
+                    var receiveDataLength = result.ReceivedBytes;
 
-                    if (ReceiveDataLength > 0)
+                    if (receiveDataLength > 0)
                     {
-                        var data = new byte[ReceiveDataLength];
-                        Array.Copy(buffer, data, ReceiveDataLength);
+                        var data = new byte[receiveDataLength];
+                        Array.Copy(buffer, data, receiveDataLength);
 
                         ReceiveMessage?.Invoke(this, data);
                     }
                 }
-                catch (Exception ex)
+                catch (OperationCanceledException) when (token.IsCancellationRequested)
+                {
+                    break;
+                }
+                catch (ObjectDisposedException) when (token.IsCancellationRequested)
+                {
+                    break;
+                }
+                catch (SocketException ex)
                 {
                     ReceiveErrorOccurred?.Invoke(this, ex);
+                    break;
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ReceiveErrorOccurred?.Invoke(this, ex);
+                    break;
                 }
             }
         }
@@ -131,6 +168,8 @@ namespace UdpConnect
         {
             try
             {
+                ArgumentNullException.ThrowIfNull(data);
+
                 if (_udpSocket == null)
                     throw new InvalidOperationException("UDP socket not started.");
                 if (RemoteIPAddress == null || RemotePort == 0)
@@ -142,7 +181,11 @@ namespace UdpConnect
 
                 _udpSocket.SendTo(data, remoteEP);
             }
-            catch (Exception ex)
+            catch (SocketException ex)
+            {
+                SendErrorOccurred?.Invoke(this, ex);
+            }
+            catch (InvalidOperationException ex)
             {
                 SendErrorOccurred?.Invoke(this, ex);
             }

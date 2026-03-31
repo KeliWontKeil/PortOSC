@@ -27,6 +27,56 @@ namespace TcpConnect
             remove => ReceiveMassage -= value;
         }
 
+        // Kept as the shared connection state reset path so connect, disconnect, and fault handling stay aligned.
+        private void ResetClientState()
+        {
+            _ClientListen_cts?.Cancel();
+            _ClientListen_cts?.Dispose();
+            _ClientListen_cts = null;
+
+            _stream?.Dispose();
+            _stream = null;
+
+            _client?.Dispose();
+            _client = null;
+
+            ClientConnectState.Value = false;
+        }
+
+        private void StartClientListen()
+        {
+            _ClientListen_cts = new CancellationTokenSource();
+            ClientListenTaskHandle = Task.Run(() => ClientListenTask(_ClientListen_cts.Token));
+        }
+
+        private async Task ConnectCoreAsync(IPAddress address, int port, int timeoutMs)
+        {
+            if (Connected)
+                throw new InvalidOperationException("Already connected.");
+
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(timeoutMs);
+
+            ResetClientState();
+            _client = new TcpClient();
+
+            using var timeoutCts = new CancellationTokenSource(timeoutMs);
+
+            try
+            {
+                await _client.ConnectAsync(address, port, timeoutCts.Token).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (timeoutCts.IsCancellationRequested)
+            {
+                _client.Dispose();
+                _client = null;
+                throw new TimeoutException("Connect timeout.");
+            }
+
+            _stream = _client.GetStream();
+            StartClientListen();
+            ClientConnectState.Value = true;
+        }
+
         public SimpleTcpClient(string? InputStrIPaddress = default, int InputPort = default)
         {
             if (InputStrIPaddress != null)
@@ -55,79 +105,61 @@ namespace TcpConnect
                     ReceiveMassage?.Invoke(this, result);
                 }
             }
+            catch (OperationCanceledException) when (token.IsCancellationRequested)
+            {
+            }
+            catch (ObjectDisposedException) when (token.IsCancellationRequested)
+            {
+            }
             catch (Exception ex)
             {
-                _client?.Close();
-                _stream?.Close();
+                ResetClientState();
                 ReceiveErrorOccurred?.Invoke(this, ex);
+            }
+            finally
+            {
                 ClientConnectState.Value = false;
             }
         }
 
         public async Task Connect(int timeoutMs = 1000)
         {
-            if (Connected)
-                throw new InvalidOperationException("Already connected.");
-
-            _client = new TcpClient();
-            var cts = new CancellationTokenSource(timeoutMs);
-
             if (ToConnectServerIPaddress == null || ToConnectServerPort == 0)
                 throw new InvalidOperationException("Invaild parameter.");
 
-            var connectTask = _client.ConnectAsync(ToConnectServerIPaddress, ToConnectServerPort);
-
-            var completed = await Task.WhenAny(connectTask, Task.Delay(Timeout.Infinite, cts.Token));
-            if (completed != connectTask)
-                throw new TimeoutException("Connect timeout.");
-
-            _stream = _client.GetStream();
-
-            _ClientListen_cts = new CancellationTokenSource();
-            ClientListenTaskHandle = Task.Run(() => ClientListenTask(_ClientListen_cts.Token));
-
-            ClientConnectState.Value = true;
+            await ConnectCoreAsync(ToConnectServerIPaddress, ToConnectServerPort, timeoutMs).ConfigureAwait(false);
         }
 
         public async Task Connect(string IP, int Port, int timeoutMs = 1000)
         {
-            if (Connected)
-                throw new InvalidOperationException("Already connected.");
-
             ToConnectServerIPaddress = IPAddress.Parse(IP);
             ToConnectServerPort = Port;
-            _client = new TcpClient();
-            var cts = new CancellationTokenSource(timeoutMs);
-            var connectTask = _client.ConnectAsync(ToConnectServerIPaddress, ToConnectServerPort);
 
-            var completed = await Task.WhenAny(connectTask, Task.Delay(Timeout.Infinite, cts.Token));
-            if (completed != connectTask)
-                throw new TimeoutException("Connect timeout.");
-
-            _stream = _client.GetStream();
-
-            _ClientListen_cts = new CancellationTokenSource();
-            ClientListenTaskHandle = Task.Run(() => ClientListenTask(_ClientListen_cts.Token));
-
-            ClientConnectState.Value = true;
+            await ConnectCoreAsync(ToConnectServerIPaddress, ToConnectServerPort, timeoutMs).ConfigureAwait(false);
         }
 
         public async Task Disconnect()
         {
-            _client?.Close();
-            _stream?.Close();
             _ClientListen_cts?.Cancel();
+            _stream?.Close();
+            _client?.Close();
+
             if (ClientListenTaskHandle != null)
             {
-                await ClientListenTaskHandle;
+                await ClientListenTaskHandle.ConfigureAwait(false);
+                ClientListenTaskHandle.Dispose();
+                ClientListenTaskHandle = null;
             }
-            ClientConnectState.Value = false;
+
+            ResetClientState();
         }
 
         public async Task SendAsync(byte[] data, CancellationToken token = default)
         {
             try
             {
+                ArgumentNullException.ThrowIfNull(data);
+
                 if (!Connected)
                     throw new InvalidOperationException("Not connected.");
 
@@ -142,9 +174,7 @@ namespace TcpConnect
 
         public void Dispose()
         {
-            _ClientListen_cts?.Cancel();
-            _stream?.Dispose();
-            _client?.Dispose();
+            ResetClientState();
         }
     }
 
@@ -245,6 +275,40 @@ namespace TcpConnect
             remove => ReceiveMassage -= value;
         }
 
+        // Keeps server lifecycle changes concentrated so start/stop and fault recovery share the same cleanup path.
+        private void ResetServerState()
+        {
+            _ServerListen_cts?.Cancel();
+            _ServerListen_cts?.Dispose();
+            _ServerListen_cts = null;
+
+            ServerConnectedClient?.Dispose();
+            ServerConnectedClient = null;
+
+            Server?.Close();
+            Server = null;
+
+            ServerConnectState.Value = ConnectState.Disconnect;
+        }
+
+        private void StartServerListen()
+        {
+            _ServerListen_cts = new CancellationTokenSource();
+            ServerListenTaskHandle = Task.Run(() => ServerListenTask(_ServerListen_cts.Token), _ServerListen_cts.Token);
+        }
+
+        private void StartServerCore(string ip, int port)
+        {
+            if (Server != null)
+                throw new InvalidOperationException("Server already started.");
+
+            ServerIPAddress = ip;
+            ServerPort = port;
+            Server = new SimpleTcpServer(ServerIPAddress, ServerPort);
+            Server.Start();
+            StartServerListen();
+        }
+
         private async Task ServerListenTask(CancellationToken cancellationtoken)
         {
             while (!cancellationtoken.IsCancellationRequested)
@@ -252,19 +316,36 @@ namespace TcpConnect
                 try
                 {
                     ServerConnectState.Value = ConnectState.WaitConnect;
-                    ServerConnectedClient = await Server!.AcceptAsync();
+                    var acceptTask = Server!.AcceptAsync();
+                    var completed = await Task.WhenAny(acceptTask, Task.Delay(Timeout.Infinite, cancellationtoken));
+                    if (completed != acceptTask)
+                    {
+                        break;
+                    }
+
+                    ServerConnectedClient = await acceptTask;
                     ServerConnectState.Value = ConnectState.Connected;
+
                     while (!cancellationtoken.IsCancellationRequested)
                     {
                         var recdata = await ServerConnectedClient.ReceiveAsync(8192, cancellationtoken);
                         ReceiveMassage?.Invoke(this, recdata);
                     }
                 }
+                catch (OperationCanceledException) when (cancellationtoken.IsCancellationRequested)
+                {
+                    break;
+                }
+                catch (ObjectDisposedException) when (cancellationtoken.IsCancellationRequested)
+                {
+                    break;
+                }
                 catch (Exception ex)
                 {
                     ReceiveErrorOccurred?.Invoke(this, ex);
                 }
             }
+
             ServerConnectState.Value = ConnectState.Disconnect;
         }
 
@@ -272,7 +353,9 @@ namespace TcpConnect
         {
             try
             {
-                if (ServerConnectState.Value == ConnectState.Connected)
+                ArgumentNullException.ThrowIfNull(data);
+
+                if (ServerConnectState.Value == ConnectState.Connected && ServerConnectedClient?.Connected == true)
                 {
                     await ServerConnectedClient!.SendAsync(data);
                 }
@@ -285,34 +368,31 @@ namespace TcpConnect
 
         public void StartServer(string IP, int Port)
         {
-            ServerIPAddress = IP;
-            ServerPort = Port;
-            Server = new SimpleTcpServer(ServerIPAddress, ServerPort);
-            _ServerListen_cts = new CancellationTokenSource();
-            Server.Start();
-            ServerListenTaskHandle = Task.Run(() => ServerListenTask(_ServerListen_cts.Token), _ServerListen_cts.Token);
+            StartServerCore(IP, Port);
         }
+
         public void StartServer()
         {
             if (ServerIPAddress == null || ServerPort == 0)
                 throw new InvalidOperationException("Invaild parameter.");
-            Server = new SimpleTcpServer(ServerIPAddress, ServerPort);
-            _ServerListen_cts = new CancellationTokenSource();
-            Server.Start();
-            ServerListenTaskHandle = Task.Run(() => ServerListenTask(_ServerListen_cts.Token), _ServerListen_cts.Token);
+
+            StartServerCore(ServerIPAddress, ServerPort);
         }
 
         public async Task StopServer()
         {
-            Server?.Close();
-            ServerConnectedClient?.Dispose();
             _ServerListen_cts?.Cancel();
+            ServerConnectedClient?.Close();
+            Server?.Close();
+
             if (ServerListenTaskHandle != null)
             {
-                await ServerListenTaskHandle;
+                await ServerListenTaskHandle.ConfigureAwait(false);
                 ServerListenTaskHandle.Dispose();
+                ServerListenTaskHandle = null;
             }
-            ServerConnectState.Value = ConnectState.Disconnect;
+
+            ResetServerState();
         }
     }
 }

@@ -12,12 +12,15 @@ namespace _SerialPortSource
         public string? StopBits { get; set; }
         public string? Parity { get; set; }
     }
-    public class SerialPortSource : IReceiveEndpoint
+    public class SerialPortSource : IReceiveEndpoint, IDisposable
     {
-        private readonly SerialPort _SerialPort;
+        private SerialPort? _serialPort;
+        private Task? _receiveTask;
+        private CancellationTokenSource? _receiveCts;
+        private volatile bool _closing;
+
         public SerialConfig SerialConfig { get; set; }
         public ChangeEventValue<bool> SerialState { get; set; }
-
 
         public event EventHandler<byte[]>? RawDataReceived;
         public event EventHandler<Exception>? ReceiveErrorOccurred;
@@ -29,69 +32,173 @@ namespace _SerialPortSource
 
         public SerialPortSource(SerialConfig? config = default)
         {
-            _SerialPort = new SerialPort();
             SerialState = new ChangeEventValue<bool>(false);
-            SerialConfig = new SerialConfig();
-            if (config != null)
-                SerialConfig = config;
+            SerialConfig = config ?? new SerialConfig();
+        }
+
+        private static void ConfigurePort(SerialPort serialPort, SerialConfig serialConfig)
+        {
+            if (string.IsNullOrWhiteSpace(serialConfig.PortName))
+                throw new InvalidOperationException("Serial port name is not set.");
+
+            if (!int.TryParse(serialConfig.BaudRate, out var baudRate) || baudRate <= 0)
+                throw new InvalidOperationException("Invalid serial baud rate.");
+
+            if (!int.TryParse(serialConfig.DataBits, out var dataBits) || dataBits <= 0)
+                throw new InvalidOperationException("Invalid serial data bits.");
+
+            serialPort.PortName = serialConfig.PortName;
+            serialPort.BaudRate = baudRate;
+            serialPort.DataBits = dataBits;
+
+            serialPort.StopBits = serialConfig.StopBits switch
+            {
+                "1" => StopBits.One,
+                "1.5" => StopBits.OnePointFive,
+                "2" => StopBits.Two,
+                _ => throw new InvalidOperationException("Invalid serial stop bits.")
+            };
+
+            serialPort.Parity = serialConfig.Parity switch
+            {
+                "奇校验" => Parity.Odd,
+                "偶校验" => Parity.Even,
+                "无" => Parity.None,
+                _ => throw new InvalidOperationException("Invalid serial parity.")
+            };
+        }
+
+        private void StartReceiveLoop(SerialPort serialPort)
+        {
+            _receiveCts = new CancellationTokenSource();
+            _receiveTask = Task.Run(() => ReceiveLoopAsync(serialPort, _receiveCts.Token));
+        }
+
+        private async Task ReceiveLoopAsync(SerialPort serialPort, CancellationToken token)
+        {
+            var buffer = new byte[4096];
+
+            try
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    if (!serialPort.IsOpen)
+                    {
+                        break;
+                    }
+
+                    var available = serialPort.BytesToRead;
+                    if (available <= 0)
+                    {
+                        await Task.Delay(10, token).ConfigureAwait(false);
+                        continue;
+                    }
+
+                    var count = Math.Min(available, buffer.Length);
+                    var bytesRead = serialPort.Read(buffer, 0, count);
+                    if (bytesRead <= 0)
+                    {
+                        continue;
+                    }
+
+                    var data = new byte[bytesRead];
+                    Array.Copy(buffer, data, bytesRead);
+                    RawDataReceived?.Invoke(this, data);
+                }
+            }
+            catch (OperationCanceledException) when (token.IsCancellationRequested || _closing)
+            {
+            }
+            catch (ObjectDisposedException) when (_closing || token.IsCancellationRequested)
+            {
+            }
+            catch (IOException ex) when (!_closing)
+            {
+                ReceiveErrorOccurred?.Invoke(this, ex);
+            }
+            catch (UnauthorizedAccessException ex) when (!_closing)
+            {
+                ReceiveErrorOccurred?.Invoke(this, ex);
+            }
+            catch (InvalidOperationException ex) when (!_closing)
+            {
+                ReceiveErrorOccurred?.Invoke(this, ex);
+            }
+            finally
+            {
+                SerialState.Value = false;
+                _closing = false;
+            }
         }
 
         public void Open()
         {
-            _SerialPort.PortName = SerialConfig.PortName;
-            _SerialPort.BaudRate = int.Parse(SerialConfig.BaudRate!);
-            _SerialPort.DataBits = int.Parse(SerialConfig.DataBits!);
-            switch (SerialConfig.StopBits)
-            {
-                case "1": _SerialPort.StopBits = StopBits.One; break;
-                case "1.5": _SerialPort.StopBits = StopBits.OnePointFive; break;
-                case "2": _SerialPort.StopBits = StopBits.Two; break;
-            }
-            switch (SerialConfig.Parity)
-            {
-                case "奇校验": _SerialPort.Parity = Parity.Odd; break;
-                case "偶校验": _SerialPort.Parity = Parity.Even; break;
-                case "无": _SerialPort.Parity = Parity.None; break;
-            }
+            if (_serialPort?.IsOpen == true)
+                throw new InvalidOperationException("Serial port already opened.");
+
+            if (_receiveTask != null && !_receiveTask.IsCompleted)
+                throw new InvalidOperationException("Serial port is closing.");
+
+            var serialPort = new SerialPort();
+            ConfigurePort(serialPort, SerialConfig);
+
+            serialPort.Open();
+            _serialPort = serialPort;
+            _closing = false;
+            StartReceiveLoop(serialPort);
             SerialState.Value = true;
-            _SerialPort.Open();
-            _SerialPort.DataReceived += SerialPort_DataReceived;
         }
 
         public void Close()
         {
-            SerialState.Value = false;
-            _SerialPort.Close();
-            _SerialPort.DataReceived -= SerialPort_DataReceived;
-        }
+            var serialPort = _serialPort;
+            if (serialPort == null)
+            {
+                SerialState.Value = false;
+                return;
+            }
 
-        public void Write(string text) => _SerialPort.Write(text);
-        public void Write(byte[] buffer, int offset, int count) => _SerialPort.Write(buffer, offset, count);
-        public void Write(char[] buffer, int offset, int count) => _SerialPort.Write(buffer, offset, count);
+            _closing = true;
+            _receiveCts?.Cancel();
 
-        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
             try
             {
-                int n = _SerialPort.BytesToRead;
-                byte[] buf = new byte[n];
-                _SerialPort.Read(buf, 0, n);
-
-                RawDataReceived?.Invoke(this, buf);
+                if (serialPort.IsOpen)
+                {
+                    serialPort.Close();
+                }
             }
-            catch (Exception ex)
+            finally
             {
-                try
-                {
-                    Close();
-                }
-                catch
-                { }
-                finally
-                {
-                    ReceiveErrorOccurred?.Invoke(this, ex);
-                }
+                serialPort.Dispose();
+                _serialPort = null;
+                _receiveCts?.Dispose();
+                _receiveCts = null;
+                SerialState.Value = false;
             }
+        }
+
+        public Task CloseAsync()
+        {
+            Close();
+            return Task.CompletedTask;
+        }
+
+        private SerialPort GetOpenSerialPort()
+        {
+            if (_serialPort is not { IsOpen: true } serialPort)
+                throw new InvalidOperationException("Serial port is not open.");
+
+            return serialPort;
+        }
+
+        public void Write(string text) => GetOpenSerialPort().Write(text);
+        public void Write(byte[] buffer, int offset, int count) => GetOpenSerialPort().Write(buffer, offset, count);
+        public void Write(char[] buffer, int offset, int count) => GetOpenSerialPort().Write(buffer, offset, count);
+
+        public void Dispose()
+        {
+            Close();
         }
 
     }

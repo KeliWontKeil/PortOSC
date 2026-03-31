@@ -8,28 +8,17 @@ namespace Tools
         {
             if (control == null || control.IsDisposed) return;
 
-            if (control.InvokeRequired)
+            if (control.InvokeRequired && control.IsHandleCreated)
             {
-                control.Invoke(new Action(() => action(control)));
+                control.BeginInvoke(new Action(() => action(control)));
+            }
+            else if (control.InvokeRequired)
+            {
+                return;
             }
             else
             {
                 action(control);
-            }
-        }
-
-        public static T? SafeRead<T>(Control control, Func<T> getter)
-        {
-            if (control == null || control.IsDisposed)
-                return default;
-
-            if (control.InvokeRequired)
-            {
-                return (T)control.Invoke(getter);
-            }
-            else
-            {
-                return getter();
             }
         }
     }

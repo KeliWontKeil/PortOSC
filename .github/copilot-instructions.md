@@ -9,14 +9,15 @@
 1. Reduce duplication in `Form1` state/UI toggling logic
 2. Extract parsing/forwarding logic from UI handlers
 3. Keep behavior compatible while refactoring
+4. Address root causes of issues rather than superficial fixes; prefer deeper behavioral correctness during refactoring
 
 ## Coding Rules
 - Prefer behavior-preserving changes and follow the current task's refactor scope
 - Do not introduce new dependencies unless necessary
 - Reuse existing utilities in `src/Tools.cs` when possible
 - Keep transport code (`Serial/TCP/UDP`) independent from UI controls
-- Use async APIs consistently, avoid fire-and-forget when reliability matters
-- Implement large-scale refactoring in a single pass rather than breaking it into smaller steps
+- Use async APIs consistently; avoid fire-and-forget when reliability matters
+- Implement large-scale refactoring in a single pass rather than breaking it into smaller steps; continue through multiple compile-verified substeps without pausing for each small stage, and only stop for necessary runtime validation or after a substantial batch of refactoring
 - After each modification, perform local Git commits without pushing
 - Maintain version control using `1.2.3` rule:
   - `1`: major version (change only for fundamental architecture/function changes)

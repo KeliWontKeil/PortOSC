@@ -1,4 +1,5 @@
 using System.Text;
+using System.Globalization;
 
 namespace PortOSC.Services;
 
@@ -29,6 +30,15 @@ public sealed class ReceivePipeline
         ArgumentNullException.ThrowIfNull(sourceData);
 
         var forwardData = sourceData.ToArray();
+        if (forwardData.Length == 0)
+        {
+            return new ReceivePipelineResult
+            {
+                ForwardData = forwardData,
+                AppendNewLine = false
+            };
+        }
+
         if (options.StopReceive)
         {
             return new ReceivePipelineResult
@@ -49,12 +59,13 @@ public sealed class ReceivePipeline
             ParseOscFrames(forwardData, options, result.OscFrames);
         }
 
-        result.DisplayText = options.ShowHex
-            ? string.Join(" ", forwardData.Select(b => b.ToString("X2"))) + " "
-            : Encoding.ASCII.GetString(forwardData);
+        result.DisplayText = BuildDisplayText(forwardData, options.ShowHex);
 
         return result;
     }
+
+    private static string BuildDisplayText(byte[] forwardData, bool showHex)
+        => showHex ? string.Join(" ", forwardData.Select(b => b.ToString("X2"))) + " " : Encoding.ASCII.GetString(forwardData);
 
     private void ParseOscFrames(byte[] receivedBytes, ReceivePipelineOptions options, List<double[]> outputFrames)
     {
@@ -75,19 +86,28 @@ public sealed class ReceivePipeline
 
         while (TryExtractFrame(options.HeadToken, options.EndToken, out var frameTokens))
         {
-            try
+            if (TryConvertFrameTokens(frameTokens, out var frame))
             {
-                outputFrames.Add([.. frameTokens.Select(Convert.ToDouble)]);
-            }
-            catch (FormatException)
-            {
-                continue;
-            }
-            catch (OverflowException)
-            {
-                continue;
+                outputFrames.Add(frame);
             }
         }
+    }
+
+    private static bool TryConvertFrameTokens(List<string> frameTokens, out double[] frame)
+    {
+        frame = [];
+
+        var values = new double[frameTokens.Count];
+        for (var i = 0; i < frameTokens.Count; i++)
+        {
+            if (!double.TryParse(frameTokens[i], NumberStyles.Float, CultureInfo.InvariantCulture, out values[i]))
+            {
+                return false;
+            }
+        }
+
+        frame = values;
+        return true;
     }
 
     private bool TryExtractFrame(string headToken, string endToken, out List<string> frameTokens)

@@ -15,8 +15,25 @@ public sealed class ReceiveEndpointHub : IDisposable
     {
         ArgumentNullException.ThrowIfNull(endpoint);
 
+        if (_endpoints.Contains(endpoint))
+        {
+            return;
+        }
+
         endpoint.DataReceived += EndpointOnDataReceived;
         _endpoints.Add(endpoint);
+    }
+
+    public void Unregister(IReceiveEndpoint endpoint)
+    {
+        ArgumentNullException.ThrowIfNull(endpoint);
+
+        if (!_endpoints.Remove(endpoint))
+        {
+            return;
+        }
+
+        endpoint.DataReceived -= EndpointOnDataReceived;
     }
 
     public void Dispose()
