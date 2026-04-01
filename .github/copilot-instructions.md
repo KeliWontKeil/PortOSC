@@ -1,7 +1,7 @@
 # Copilot Instructions for PortOSC
 
 ## Project Snapshot
-- Tech: `.NET 8`, `Windows Forms`
+- Tech: `.NET 8`, `Windows Forms` (targeting Visual Studio Community 2026)
 - Main goal: serial/network debugging + lightweight oscilloscope plotting
 - Current architecture: event-driven, but `Form1` is highly coupled to transport and parsing logic
 
@@ -19,10 +19,10 @@
 - Use async APIs consistently; avoid fire-and-forget when reliability matters
 - Implement large-scale refactoring in a single pass rather than breaking it into smaller steps; continue through multiple compile-verified substeps without pausing for each small stage, and only stop for necessary runtime validation or after a substantial batch of refactoring
 - After each modification, perform local Git commits without pushing
-- Maintain version control using `1.2.3` rule:
-  - `1`: major version (change only for fundamental architecture/function changes)
-  - `2`: push-ready minor version (validated milestones for GitHub push)
-  - `3`: local revision (increment on every local commit)
+- Maintain version control using the current milestone scheme:
+  - `1.0.x`: historical local revisions
+  - `1.1.0`: first push-ready milestone
+  - `1.1.x`: local revisions after the push-ready milestone
 - If asked to modify the current commit, amend it instead of creating a new commit
 
 ## File/Layer Expectations

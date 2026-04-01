@@ -170,7 +170,7 @@ namespace PortOSC
             try
             {
                 StringText.BackColor = System.Drawing.Color.White;
-                StringHexText.Text = Convert.ToHexString(StringEncoding.GetBytes(StringText.Text));
+                StringHexText.Text = string.Join(" ", StringEncoding.GetBytes(StringText.Text).Select(b => b.ToString("X2")));
                 StringHexText.BackColor = System.Drawing.Color.White;
             }
             catch
@@ -195,11 +195,6 @@ namespace PortOSC
                 StringText.Text = "";
                 StringText.BackColor = System.Drawing.Color.Yellow;
             }
-        }
-
-        private void Form_HexToChar_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

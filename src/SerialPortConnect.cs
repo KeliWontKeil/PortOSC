@@ -12,15 +12,15 @@ namespace _SerialPortSource
         public string? StopBits { get; set; }
         public string? Parity { get; set; }
     }
-    public class SerialPortSource : IReceiveEndpoint, IDisposable
+    public class SerialPortSource(SerialConfig? config = default) : IReceiveEndpoint, IDisposable
     {
         private SerialPort? _serialPort;
         private Task? _receiveTask;
         private CancellationTokenSource? _receiveCts;
         private volatile bool _closing;
 
-        public SerialConfig SerialConfig { get; set; }
-        public ChangeEventValue<bool> SerialState { get; set; }
+        public SerialConfig SerialConfig { get; set; } = config ?? new SerialConfig();
+        public ChangeEventValue<bool> SerialState { get; set; } = new(false);
 
         public event EventHandler<byte[]>? RawDataReceived;
         public event EventHandler<Exception>? ReceiveErrorOccurred;
@@ -28,12 +28,6 @@ namespace _SerialPortSource
         {
             add => RawDataReceived += value;
             remove => RawDataReceived -= value;
-        }
-
-        public SerialPortSource(SerialConfig? config = default)
-        {
-            SerialState = new ChangeEventValue<bool>(false);
-            SerialConfig = config ?? new SerialConfig();
         }
 
         private static void ConfigurePort(SerialPort serialPort, SerialConfig serialConfig)
@@ -199,6 +193,8 @@ namespace _SerialPortSource
         public void Dispose()
         {
             Close();
+
+            GC.SuppressFinalize(this);
         }
 
     }

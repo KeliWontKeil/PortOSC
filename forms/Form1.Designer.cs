@@ -142,7 +142,7 @@ namespace PortOSC
             YStep = new NumberTextBox();
             RightLimit = new NumberTextBox();
             LeftLimit = new NumberTextBox();
-            ButtomLimit = new NumberTextBox();
+            BottomLimit = new NumberTextBox();
             TopLimit = new NumberTextBox();
             ((System.ComponentModel.ISupportInitialize)ChannelLength).BeginInit();
             flowLayoutPanel3.SuspendLayout();
@@ -1493,22 +1493,22 @@ namespace PortOSC
             LeftLimit.Text = "0.00";
             LeftLimit.Leave += LeftLimit_Leave;
             // 
-            // ButtomLimit
+            // BottomLimit
             // 
-            ButtomLimit.DecimalPointNumber = 2;
-            ButtomLimit.DoubleValue = -5D;
-            ButtomLimit.FloatValue = 0F;
-            ButtomLimit.Location = new Point(1396, 688);
-            ButtomLimit.LongValue = 0L;
-            ButtomLimit.Margin = new Padding(3, 4, 3, 4);
-            ButtomLimit.MaxValue = "";
-            ButtomLimit.MinValue = "";
-            ButtomLimit.Name = "ButtomLimit";
-            ButtomLimit.NumberType = NumberType.Double;
-            ButtomLimit.Size = new Size(73, 27);
-            ButtomLimit.TabIndex = 55;
-            ButtomLimit.Text = "-5.00";
-            ButtomLimit.Leave += ButtomLimit_Leave;
+            BottomLimit.DecimalPointNumber = 2;
+            BottomLimit.DoubleValue = -5D;
+            BottomLimit.FloatValue = 0F;
+            BottomLimit.Location = new Point(1396, 688);
+            BottomLimit.LongValue = 0L;
+            BottomLimit.Margin = new Padding(3, 4, 3, 4);
+            BottomLimit.MaxValue = "";
+            BottomLimit.MinValue = "";
+            BottomLimit.Name = "BottomLimit";
+            BottomLimit.NumberType = NumberType.Double;
+            BottomLimit.Size = new Size(73, 27);
+            BottomLimit.TabIndex = 55;
+            BottomLimit.Text = "-5.00";
+            BottomLimit.Leave += BottomLimit_Leave;
             // 
             // TopLimit
             // 
@@ -1556,7 +1556,7 @@ namespace PortOSC
             Controls.Add(label10);
             Controls.Add(RightLimit);
             Controls.Add(LeftLimit);
-            Controls.Add(ButtomLimit);
+            Controls.Add(BottomLimit);
             Controls.Add(TopLimit);
             Controls.Add(ClearData);
             Controls.Add(SavePlot);
@@ -1643,7 +1643,7 @@ namespace PortOSC
         private System.Windows.Forms.Button SavePlot;
         private System.Windows.Forms.Button ClearData;
         private NumberTextBox TopLimit;
-        private NumberTextBox ButtomLimit;
+        private NumberTextBox BottomLimit;
         private NumberTextBox LeftLimit;
         private NumberTextBox RightLimit;
         private System.Windows.Forms.Label label10;

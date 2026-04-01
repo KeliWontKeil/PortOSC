@@ -3,9 +3,9 @@
 ## 1. 项目定位
 `PortOSC` 是一个基于 `.NET 8` 的 `Windows Forms` 桌面应用，定位为轻量级串口/网络调试工具，核心是“多协议接收 + 文本显示 + 简易示波器 + 数据转发”。
 
-当前重构版本：`1.1.3`（本地）
+当前重构版本：`1.1.0`（首个可推送里程碑）
 
-版本管理规则：`1.2.3`（1=大版本，2=可推送小版本，3=本地修订号）
+版本管理规则：`1.2.3`（1=大版本，2=可推送小版本，3=本地修订号，此处编号仅作示例，应以实际项目为准）
 
 当前支持：
 - 串口（SerialPort）
@@ -22,12 +22,14 @@
 - 数据转发服务器（接收后可继续转发）
 - 配置保存/加载（JSON）
 - 辅助工具窗体：Hex/Char 转换
+- 发送字符串库工具（条目编辑、导入/导出、自动加载/自动保存）
 
 ## 3. 代码结构（现状）
 - `src/Program.cs`：程序入口
 - `forms/Form1.cs`：主窗体，承载绝大部分业务逻辑
 - `forms/Form1.Designer.cs`：主窗体控件定义
 - `forms/Form_HexToChar.cs`：Hex/Char 工具窗体
+- `forms/Form_SendStringLibrary.cs`：发送字符串库工具窗体
 - `src/SerialPortConnect.cs`：串口封装
 - `src/TcpConnect.cs`：TCP Client/Server 封装
 - `src/UdpConnect.cs`：UDP 封装
@@ -61,8 +63,8 @@
 3. 每次改动后进行构建验证
 4. 对外行为变化必须补文档
 
-## 8. 1.1.x 重构落地（本地）
+## 8. 1.1.x 重构落地（里程碑后续）
 1. 增加接收端口抽象与聚合：`IReceiveEndpoint` + `ReceiveEndpointHub`
 2. 增加接收解析管线：`ReceivePipeline`
 3. 曲线更新从“逐帧 Invoke 刷新”改为“队列 + 定时批量刷新”
-4. 版本号更新至 `1.1.x` 本地修订序列
+4. 版本号进入 `1.1.x` 后续修订序列

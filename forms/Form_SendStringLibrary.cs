@@ -6,7 +6,7 @@ namespace PortOSC;
 
 public partial class Form_SendStringLibrary : Form
 {
-    private const string DefaultPresetFileName = "SendStringLibrary.ison";
+    private const string DefaultPresetFileName = "SendStringLibrary.json";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
     private readonly Action<string> _fillHexText;
@@ -23,6 +23,7 @@ public partial class Form_SendStringLibrary : Form
         _fillStringText = fillStringText;
 
         InitializeComponent();
+        RowsFlowLayoutPanel.SizeChanged += RowsFlowLayoutPanel_SizeChanged;
         Shown += Form_SendStringLibrary_Shown;
     }
 
@@ -76,8 +77,8 @@ public partial class Form_SendStringLibrary : Form
     {
         using var dialog = new OpenFileDialog
         {
-            Filter = "发送字符串文件 (*.ison)|*.ison",
-            DefaultExt = ".ison",
+            Filter = "发送字符串文件 (*.json)|*.json",
+            DefaultExt = ".json",
             Multiselect = false
         };
 
@@ -100,8 +101,8 @@ public partial class Form_SendStringLibrary : Form
     {
         using var dialog = new SaveFileDialog
         {
-            Filter = "发送字符串文件 (*.ison)|*.ison",
-            DefaultExt = ".ison",
+            Filter = "发送字符串文件 (*.json)|*.json",
+            DefaultExt = ".json",
             AddExtension = true
         };
 
@@ -142,7 +143,7 @@ public partial class Form_SendStringLibrary : Form
 
     private void DeleteButton_Click(object? sender, EventArgs e)
     {
-        if (sender is not Button button || button.Tag is not FlowLayoutPanel rowPanel || rowPanel.Tag is not SendStringPresetItem item)
+        if (sender is not Button button || button.Tag is not TableLayoutPanel rowPanel || rowPanel.Tag is not SendStringPresetItem item)
         {
             return;
         }
@@ -150,6 +151,7 @@ public partial class Form_SendStringLibrary : Form
         _items.Remove(item);
         RowsFlowLayoutPanel.Controls.Remove(rowPanel);
         rowPanel.Dispose();
+        ResizeRowPanels();
     }
 
     private void ContentBox_TextChanged(object? sender, EventArgs e)
@@ -176,36 +178,63 @@ public partial class Form_SendStringLibrary : Form
     {
         _items.Add(item);
         RowsFlowLayoutPanel.Controls.Add(CreateRowPanel(item));
+        ResizeRowPanels();
     }
 
-    private FlowLayoutPanel CreateRowPanel(SendStringPresetItem item)
+    private void RowsFlowLayoutPanel_SizeChanged(object? sender, EventArgs e)
     {
-        var rowPanel = new FlowLayoutPanel
+        ResizeRowPanels();
+    }
+
+    private void ResizeRowPanels()
+    {
+        var width = RowsFlowLayoutPanel.ClientSize.Width - RowsFlowLayoutPanel.Padding.Horizontal - SystemInformation.VerticalScrollBarWidth - 6;
+        if (width < 0)
         {
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            FlowDirection = FlowDirection.LeftToRight,
-            WrapContents = false,
-            Margin = new Padding(3),
-            Padding = new Padding(2)
+            width = 0;
+        }
+
+        foreach (Control control in RowsFlowLayoutPanel.Controls)
+        {
+            control.Width = width;
+        }
+    }
+
+    private TableLayoutPanel CreateRowPanel(SendStringPresetItem item)
+    {
+        var rowPanel = new TableLayoutPanel
+        {
+            AutoSize = false,
+            ColumnCount = 5,
+            Height = 36,
+            Margin = new Padding(0, 0, 0, 6),
+            Padding = new Padding(0),
+            RowCount = 1,
+            Tag = item
         };
-        rowPanel.Tag = item;
+        rowPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        rowPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 140F));
+        rowPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        rowPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        rowPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
         var contentBox = new TextBox
         {
             Text = item.Content,
-            Width = 300,
-            Margin = new Padding(3, 6, 3, 3),
-            Tag = item
+            Dock = DockStyle.Fill,
+            Margin = new Padding(3, 4, 6, 4),
+            Tag = item,
+            Anchor = AnchorStyles.Left | AnchorStyles.Right
         };
         contentBox.TextChanged += ContentBox_TextChanged;
 
         var tagBox = new TextBox
         {
             Text = item.Tag,
-            Width = 140,
-            Margin = new Padding(3, 6, 3, 3),
-            Tag = item
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0, 4, 6, 4),
+            Tag = item,
+            Anchor = AnchorStyles.Left | AnchorStyles.Right
         };
         tagBox.TextChanged += TagBox_TextChanged;
 
@@ -214,7 +243,7 @@ public partial class Form_SendStringLibrary : Form
             Text = "16进制发送",
             AutoSize = true,
             Tag = item,
-            Margin = new Padding(3)
+            Margin = new Padding(0, 3, 6, 3)
         };
         fillHexButton.Click += FillHexButton_Click;
 
@@ -223,24 +252,24 @@ public partial class Form_SendStringLibrary : Form
             Text = "字符串发送",
             AutoSize = true,
             Tag = item,
-            Margin = new Padding(3)
+            Margin = new Padding(0, 3, 6, 3)
         };
         fillStringButton.Click += FillStringButton_Click;
 
-        var deleteButton = new Button
+        Button deleteButton = new()
         {
             Text = "删除",
             AutoSize = true,
-            Margin = new Padding(3)
+            Margin = new Padding(0, 3, 0, 3),
+            Tag = rowPanel
         };
-        deleteButton.Tag = rowPanel;
         deleteButton.Click += DeleteButton_Click;
 
-        rowPanel.Controls.Add(contentBox);
-        rowPanel.Controls.Add(tagBox);
-        rowPanel.Controls.Add(fillHexButton);
-        rowPanel.Controls.Add(fillStringButton);
-        rowPanel.Controls.Add(deleteButton);
+        rowPanel.Controls.Add(contentBox, 0, 0);
+        rowPanel.Controls.Add(tagBox, 1, 0);
+        rowPanel.Controls.Add(fillHexButton, 2, 0);
+        rowPanel.Controls.Add(fillStringButton, 3, 0);
+        rowPanel.Controls.Add(deleteButton, 4, 0);
 
         return rowPanel;
     }
@@ -290,7 +319,7 @@ public partial class Form_SendStringLibrary : Form
         }
         catch (Exception ex) when (ex is IOException or JsonException or NotSupportedException or UnauthorizedAccessException)
         {
-            MessageBox.Show($"自动加载发送字符串库失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"加载字符串库失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -298,7 +327,7 @@ public partial class Form_SendStringLibrary : Form
     {
         var json = File.ReadAllText(fileName, Encoding.UTF8);
         return JsonSerializer.Deserialize<SendStringPresetDocument>(json, JsonOptions)
-            ?? throw new JsonException("文件内容不是有效的发送字符串数据。");
+            ?? throw new JsonException("文件内容无效");
     }
 
     private static string GetDefaultFilePath()
@@ -313,11 +342,11 @@ public partial class Form_SendStringLibrary : Form
     {
         var document = new SendStringPresetDocument
         {
-            Items = _items.Select(item => new SendStringPresetItem
+            Items = [.. _items.Select(item => new SendStringPresetItem
             {
                 Content = item.Content,
                 Tag = item.Tag
-            }).ToList()
+            })]
         };
 
         var json = JsonSerializer.Serialize(document, JsonOptions);

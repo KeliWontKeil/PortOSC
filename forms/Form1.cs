@@ -52,7 +52,6 @@ namespace PortOSC
         private ReceiveMode _receiveMode = ReceiveMode.SerialPort;
         private volatile bool _stopSend;
         private volatile bool _stopReceive;
-        private volatile bool _stopForwardReceive;
         private volatile bool _enableOsc;
         private volatile bool _showHex;
         private volatile bool _appendNewLine;
@@ -748,17 +747,14 @@ namespace PortOSC
         private async void TransmitServerReceivedMassageSend(object? sender, byte[] e)
         {
             byte[] ByteStr = e;
-            if (!_stopForwardReceive)
+            try
             {
-                try
-                {
-                    await SendBytes(ByteStr);
-                }
-                catch
-                {
-                    SafeOperateTools.SafeInvoke(StopReceiveCheckBox, obj => obj.Checked = true);
-                    ShowMassageTools.ReportMassage(StateMassageTextBox, "接收转发出现异常,已暂停", ShowMassageTools.LogType.Error);
-                }
+                await SendBytes(ByteStr);
+            }
+            catch
+            {
+                SafeOperateTools.SafeInvoke(StopReceiveCheckBox, obj => obj.Checked = true);
+                ShowMassageTools.ReportMassage(StateMassageTextBox, "接收转发出现异常,已暂停", ShowMassageTools.LogType.Error);
             }
         }
 
@@ -1035,7 +1031,7 @@ namespace PortOSC
         private void ResetPlot()
         {
             formPlot1.Plot.Clear();
-            formPlot1.Plot.SetAxisLimits(LeftLimit.DoubleValue, RightLimit.DoubleValue, ButtomLimit.DoubleValue, TopLimit.DoubleValue);
+            formPlot1.Plot.SetAxisLimits(LeftLimit.DoubleValue, RightLimit.DoubleValue, BottomLimit.DoubleValue, TopLimit.DoubleValue);
             loggers = [];
             for (int i = 0; i < ChannelLength.Value; i++)
             {
@@ -1115,10 +1111,10 @@ namespace PortOSC
 
         private void AxisLimitsBoxLeaveOperate()
         {
-            if (TopLimit.DoubleValue < ButtomLimit.DoubleValue)
+            if (TopLimit.DoubleValue < BottomLimit.DoubleValue)
             {
                 TopLimit.BackColor = System.Drawing.Color.Red;
-                ButtomLimit.BackColor = System.Drawing.Color.Red;
+                BottomLimit.BackColor = System.Drawing.Color.Red;
                 ShowMassageTools.ReportMassage(StateMassageTextBox, "示波器下界不能比上界高", ShowMassageTools.LogType.Error);
                 return;
             }
@@ -1131,11 +1127,11 @@ namespace PortOSC
             }
             foreach (var log in loggers)
                 log.ManageAxisLimits = true;
-            formPlot1.Plot.SetAxisLimits(LeftLimit.DoubleValue, RightLimit.DoubleValue, ButtomLimit.DoubleValue, TopLimit.DoubleValue);
+            formPlot1.Plot.SetAxisLimits(LeftLimit.DoubleValue, RightLimit.DoubleValue, BottomLimit.DoubleValue, TopLimit.DoubleValue);
             foreach (var log in loggers)
                 log.ManageAxisLimits = false;
             TopLimit.BackColor = System.Drawing.Color.White;
-            ButtomLimit.BackColor = System.Drawing.Color.White;
+            BottomLimit.BackColor = System.Drawing.Color.White;
             LeftLimit.BackColor = System.Drawing.Color.White;
             RightLimit.BackColor = System.Drawing.Color.White;
             formPlot1.Refresh();
@@ -1146,7 +1142,7 @@ namespace PortOSC
             AxisLimitsBoxLeaveOperate();
         }
 
-        private void ButtomLimit_Leave(object sender, EventArgs e)
+        private void BottomLimit_Leave(object sender, EventArgs e)
         {
             AxisLimitsBoxLeaveOperate();
         }
@@ -1181,7 +1177,7 @@ namespace PortOSC
         private void FormsPlot1_AxesChanged(object sender, EventArgs e)
         {
             TopLimit.DoubleValue = formPlot1.Plot.GetAxisLimits().YMax;
-            ButtomLimit.DoubleValue = formPlot1.Plot.GetAxisLimits().YMin;
+            BottomLimit.DoubleValue = formPlot1.Plot.GetAxisLimits().YMin;
             LeftLimit.DoubleValue = formPlot1.Plot.GetAxisLimits().XMin;
             RightLimit.DoubleValue = formPlot1.Plot.GetAxisLimits().XMax;
         }
@@ -1189,8 +1185,20 @@ namespace PortOSC
         //工具栏相关
         private void OpenHexToCharTool_Click(object sender, EventArgs e)
         {
-            HexToCharToolForm ??= new Form_HexToChar();
+            if (HexToCharToolForm == null || HexToCharToolForm.IsDisposed)
+            {
+                HexToCharToolForm = new Form_HexToChar();
+                HexToCharToolForm.FormClosed += HexToCharToolForm_FormClosed;
+            }
+
             HexToCharToolForm.Show();
+            HexToCharToolForm.BringToFront();
+            HexToCharToolForm.Activate();
+        }
+
+        private void HexToCharToolForm_FormClosed(object? sender, FormClosedEventArgs e)
+        {
+            HexToCharToolForm = null;
         }
 
         private void OpenSendStringLibraryTool_Click(object sender, EventArgs e)

@@ -36,12 +36,8 @@ namespace UdpConnect
             _Receive_cts?.Cancel();
             _Receive_cts?.Dispose();
             _Receive_cts = null;
-
-            if (_udpSocket != null)
-            {
-                _udpSocket.Dispose();
-                _udpSocket = null;
-            }
+            _udpSocket?.Dispose();
+            _udpSocket = null;
 
             ReceiveTaskHandle = null;
             UdpState.Value = false;
@@ -56,24 +52,31 @@ namespace UdpConnect
         public SimpleUdpEndpoint(string? IP = default, int Port = default)
         {
             UdpState = new ChangeEventValue<bool>(false);
-            if (IP != null)
+            if (IP is not null)
+            {
                 LocalIPAddress = IP;
+            }
+
             if (Port != 0)
+            {
                 LocalPort = Port;
+            }
         }
 
         public void Bind(string? IP = default, int Port = default)
         {
-            if (_udpSocket != null)
+            if (_udpSocket is not null)
                 throw new InvalidOperationException("UDP already started.");
 
-            if (IP != null)
+            if (IP is not null)
+            {
                 LocalIPAddress = IP;
+            }
 
             if (Port != 0)
                 LocalPort = Port;
 
-            if (LocalIPAddress == null || LocalPort == 0)
+            if (LocalIPAddress is null || LocalPort == 0)
             {
                 throw new InvalidOperationException("Local IP address or port is not set.");
             }
@@ -81,7 +84,7 @@ namespace UdpConnect
             _udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             _udpSocket.Bind(new IPEndPoint(IPAddress.Parse(LocalIPAddress), LocalPort));
 
-            if (_udpSocket.LocalEndPoint == null)
+            if (_udpSocket.LocalEndPoint is null)
             {
                 throw new InvalidOperationException("Failed to bind UDP socket.");
             }
@@ -94,13 +97,13 @@ namespace UdpConnect
 
         public async Task UnBind()
         {
-            if (_udpSocket == null)
+            if (_udpSocket is null)
                 return;
 
             _Receive_cts?.Cancel();
             _udpSocket.Close();
 
-            if (ReceiveTaskHandle != null)
+            if (ReceiveTaskHandle is not null)
             {
                 await ReceiveTaskHandle;
             }
@@ -170,9 +173,9 @@ namespace UdpConnect
             {
                 ArgumentNullException.ThrowIfNull(data);
 
-                if (_udpSocket == null)
+                if (_udpSocket is null)
                     throw new InvalidOperationException("UDP socket not started.");
-                if (RemoteIPAddress == null || RemotePort == 0)
+                if (RemoteIPAddress is null || RemotePort == 0)
                 {
                     throw new InvalidOperationException("Illegal remote address or port.");
                 }

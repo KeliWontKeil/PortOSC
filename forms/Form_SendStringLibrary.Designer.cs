@@ -36,14 +36,14 @@ partial class Form_SendStringLibrary
         RowsFlowLayoutPanel.Margin = new Padding(0);
         RowsFlowLayoutPanel.Name = "RowsFlowLayoutPanel";
         RowsFlowLayoutPanel.Padding = new Padding(8);
-        RowsFlowLayoutPanel.Size = new Size(908, 556);
+        RowsFlowLayoutPanel.Size = new Size(828, 556);
         RowsFlowLayoutPanel.TabIndex = 1;
         RowsFlowLayoutPanel.WrapContents = false;
         // 
         // SaveButton
         // 
         SaveButton.AutoSize = true;
-        SaveButton.Location = new Point(827, 11);
+        SaveButton.Location = new Point(749, 12);
         SaveButton.Margin = new Padding(3, 3, 12, 3);
         SaveButton.Name = "SaveButton";
         SaveButton.Size = new Size(83, 30);
@@ -55,7 +55,7 @@ partial class Form_SendStringLibrary
         // LoadButton
         // 
         LoadButton.AutoSize = true;
-        LoadButton.Location = new Point(738, 11);
+        LoadButton.Location = new Point(664, 12);
         LoadButton.Margin = new Padding(3, 3, 12, 3);
         LoadButton.Name = "LoadButton";
         LoadButton.Size = new Size(83, 30);
@@ -67,7 +67,7 @@ partial class Form_SendStringLibrary
         // AddButton
         // 
         AddButton.AutoSize = true;
-        AddButton.Location = new Point(627, 11);
+        AddButton.Location = new Point(570, 11);
         AddButton.Margin = new Padding(3, 3, 12, 3);
         AddButton.Name = "AddButton";
         AddButton.Size = new Size(73, 30);
@@ -78,7 +78,7 @@ partial class Form_SendStringLibrary
         // 
         // TagTextBox
         // 
-        TagTextBox.Location = new Point(469, 12);
+        TagTextBox.Location = new Point(411, 12);
         TagTextBox.Margin = new Padding(3, 3, 12, 3);
         TagTextBox.Name = "TagTextBox";
         TagTextBox.Size = new Size(150, 27);
@@ -87,7 +87,7 @@ partial class Form_SendStringLibrary
         // TagLabel
         // 
         TagLabel.AutoSize = true;
-        TagLabel.Location = new Point(422, 16);
+        TagLabel.Location = new Point(368, 17);
         TagLabel.Margin = new Padding(3, 6, 3, 3);
         TagLabel.Name = "TagLabel";
         TagLabel.Size = new Size(41, 20);
@@ -96,7 +96,7 @@ partial class Form_SendStringLibrary
         // 
         // ContentTextBox
         // 
-        ContentTextBox.Location = new Point(123, 12);
+        ContentTextBox.Location = new Point(67, 12);
         ContentTextBox.Margin = new Padding(3, 3, 12, 3);
         ContentTextBox.Name = "ContentTextBox";
         ContentTextBox.Size = new Size(293, 27);
@@ -105,18 +105,18 @@ partial class Form_SendStringLibrary
         // ContentLabel
         // 
         ContentLabel.AutoSize = true;
-        ContentLabel.Location = new Point(12, 15);
+        ContentLabel.Location = new Point(9, 17);
         ContentLabel.Margin = new Padding(3, 6, 3, 3);
         ContentLabel.Name = "ContentLabel";
-        ContentLabel.Size = new Size(105, 20);
+        ContentLabel.Size = new Size(57, 20);
         ContentLabel.TabIndex = 0;
-        ContentLabel.Text = "待发送字符串";
+        ContentLabel.Text = "字符串";
         // 
         // Form_SendStringLibrary
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(925, 613);
+        ClientSize = new Size(845, 613);
         Controls.Add(SaveButton);
         Controls.Add(LoadButton);
         Controls.Add(AddButton);
@@ -127,7 +127,6 @@ partial class Form_SendStringLibrary
         Controls.Add(RowsFlowLayoutPanel);
         Font = new Font("Segoe UI", 9F);
         Name = "Form_SendStringLibrary";
-        Text = "发送字符串库";
         ResumeLayout(false);
         PerformLayout();
     }
