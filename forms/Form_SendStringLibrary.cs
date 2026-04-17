@@ -11,16 +11,26 @@ public partial class Form_SendStringLibrary : Form
 
     private readonly Action<string> _fillHexText;
     private readonly Action<string> _fillStringText;
+    private readonly Func<string, Task> _directHexSendAsync;
+    private readonly Func<string, Task> _directStringSendAsync;
     private readonly List<SendStringPresetItem> _items = [];
     private bool _defaultPresetLoaded;
 
-    public Form_SendStringLibrary(Action<string> fillHexText, Action<string> fillStringText)
+    public Form_SendStringLibrary(
+        Action<string> fillHexText,
+        Action<string> fillStringText,
+        Func<string, Task> directHexSendAsync,
+        Func<string, Task> directStringSendAsync)
     {
         ArgumentNullException.ThrowIfNull(fillHexText);
         ArgumentNullException.ThrowIfNull(fillStringText);
+        ArgumentNullException.ThrowIfNull(directHexSendAsync);
+        ArgumentNullException.ThrowIfNull(directStringSendAsync);
 
         _fillHexText = fillHexText;
         _fillStringText = fillStringText;
+        _directHexSendAsync = directHexSendAsync;
+        _directStringSendAsync = directStringSendAsync;
 
         InitializeComponent();
         RowsFlowLayoutPanel.SizeChanged += RowsFlowLayoutPanel_SizeChanged;
@@ -121,24 +131,57 @@ public partial class Form_SendStringLibrary : Form
         }
     }
 
-    private void FillHexButton_Click(object? sender, EventArgs e)
+    private async void FillHexButton_Click(object? sender, EventArgs e)
     {
         if (sender is not Button button || button.Tag is not SendStringPresetItem item)
         {
             return;
         }
 
-        _fillHexText(BuildHexPayload(item.Content));
+        var hexText = BuildHexPayload(item.Content);
+        if (DirectSendCheckBox.Checked)
+        {
+            await SendDirectAsync(() => _directHexSendAsync(hexText));
+            return;
+        }
+
+        _fillHexText(hexText);
     }
 
-    private void FillStringButton_Click(object? sender, EventArgs e)
+    private async void FillStringButton_Click(object? sender, EventArgs e)
     {
         if (sender is not Button button || button.Tag is not SendStringPresetItem item)
         {
+            return;
+        }
+
+        if (DirectSendCheckBox.Checked)
+        {
+            await SendDirectAsync(() => _directStringSendAsync(item.Content));
             return;
         }
 
         _fillStringText(item.Content);
+    }
+
+    private async Task SendDirectAsync(Func<Task> sendAction)
+    {
+        try
+        {
+            await sendAction();
+        }
+        catch (InvalidOperationException ex)
+        {
+            MessageBox.Show($"直接发送失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        catch (FormatException ex)
+        {
+            MessageBox.Show($"直接发送失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        catch (OverflowException ex)
+        {
+            MessageBox.Show($"直接发送失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private void DeleteButton_Click(object? sender, EventArgs e)
@@ -355,4 +398,9 @@ public partial class Form_SendStringLibrary : Form
 
     private static string BuildHexPayload(string text)
         => string.Join(' ', Encoding.UTF8.GetBytes(text).Select(b => b.ToString("X2")));
+
+    private void checkBox1_CheckedChanged(object sender, EventArgs e)
+    {
+
+    }
 }

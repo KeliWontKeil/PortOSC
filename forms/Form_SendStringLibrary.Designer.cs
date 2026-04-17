@@ -25,6 +25,7 @@ partial class Form_SendStringLibrary
         TagLabel = new Label();
         ContentTextBox = new TextBox();
         ContentLabel = new Label();
+        DirectSendCheckBox = new CheckBox();
         SuspendLayout();
         // 
         // RowsFlowLayoutPanel
@@ -43,7 +44,7 @@ partial class Form_SendStringLibrary
         // SaveButton
         // 
         SaveButton.AutoSize = true;
-        SaveButton.Location = new Point(749, 12);
+        SaveButton.Location = new Point(749, 11);
         SaveButton.Margin = new Padding(3, 3, 12, 3);
         SaveButton.Name = "SaveButton";
         SaveButton.Size = new Size(83, 30);
@@ -55,7 +56,7 @@ partial class Form_SendStringLibrary
         // LoadButton
         // 
         LoadButton.AutoSize = true;
-        LoadButton.Location = new Point(664, 12);
+        LoadButton.Location = new Point(664, 11);
         LoadButton.Margin = new Padding(3, 3, 12, 3);
         LoadButton.Name = "LoadButton";
         LoadButton.Size = new Size(83, 30);
@@ -67,10 +68,10 @@ partial class Form_SendStringLibrary
         // AddButton
         // 
         AddButton.AutoSize = true;
-        AddButton.Location = new Point(570, 11);
+        AddButton.Location = new Point(458, 11);
         AddButton.Margin = new Padding(3, 3, 12, 3);
         AddButton.Name = "AddButton";
-        AddButton.Size = new Size(73, 30);
+        AddButton.Size = new Size(95, 30);
         AddButton.TabIndex = 4;
         AddButton.Text = "添加";
         AddButton.UseVisualStyleBackColor = true;
@@ -78,7 +79,7 @@ partial class Form_SendStringLibrary
         // 
         // TagTextBox
         // 
-        TagTextBox.Location = new Point(411, 12);
+        TagTextBox.Location = new Point(300, 12);
         TagTextBox.Margin = new Padding(3, 3, 12, 3);
         TagTextBox.Name = "TagTextBox";
         TagTextBox.Size = new Size(150, 27);
@@ -87,7 +88,7 @@ partial class Form_SendStringLibrary
         // TagLabel
         // 
         TagLabel.AutoSize = true;
-        TagLabel.Location = new Point(368, 17);
+        TagLabel.Location = new Point(258, 17);
         TagLabel.Margin = new Padding(3, 6, 3, 3);
         TagLabel.Name = "TagLabel";
         TagLabel.Size = new Size(41, 20);
@@ -99,7 +100,7 @@ partial class Form_SendStringLibrary
         ContentTextBox.Location = new Point(67, 12);
         ContentTextBox.Margin = new Padding(3, 3, 12, 3);
         ContentTextBox.Name = "ContentTextBox";
-        ContentTextBox.Size = new Size(293, 27);
+        ContentTextBox.Size = new Size(184, 27);
         ContentTextBox.TabIndex = 1;
         // 
         // ContentLabel
@@ -112,11 +113,22 @@ partial class Form_SendStringLibrary
         ContentLabel.TabIndex = 0;
         ContentLabel.Text = "字符串";
         // 
+        // DirectSendCheckBox
+        // 
+        DirectSendCheckBox.AutoSize = true;
+        DirectSendCheckBox.Location = new Point(561, 15);
+        DirectSendCheckBox.Name = "DirectSendCheckBox";
+        DirectSendCheckBox.Size = new Size(95, 24);
+        DirectSendCheckBox.TabIndex = 7;
+        DirectSendCheckBox.Text = "直接发送";
+        DirectSendCheckBox.UseVisualStyleBackColor = true;
+        // 
         // Form_SendStringLibrary
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(845, 613);
+        Controls.Add(DirectSendCheckBox);
         Controls.Add(SaveButton);
         Controls.Add(LoadButton);
         Controls.Add(AddButton);
@@ -138,4 +150,5 @@ partial class Form_SendStringLibrary
     private Label TagLabel;
     private TextBox ContentTextBox;
     private Label ContentLabel;
+    private CheckBox DirectSendCheckBox;
 }

@@ -723,6 +723,23 @@ namespace PortOSC
             }
         }
 
+        private async Task DirectSendHexTextAsync(string hexText)
+        {
+            ArgumentNullException.ThrowIfNull(hexText);
+
+            string[] hexParts = hexText.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            byte[] bytes = [.. hexParts.Select(h => Convert.ToByte(h, 16))];
+            await SendBytes(bytes);
+        }
+
+        private async Task DirectSendStringTextAsync(string text)
+        {
+            ArgumentNullException.ThrowIfNull(text);
+
+            byte[] bytes = [.. text.Select(c => Convert.ToByte(c))];
+            await SendBytes(bytes);
+        }
+
         private async Task SendBytes(byte[] data)
         {
             switch (_receiveMode)
@@ -1207,7 +1224,9 @@ namespace PortOSC
             {
                 SendStringLibraryToolForm = new Form_SendStringLibrary(
                     hexText => HexSendText.Text = hexText,
-                    stringText => StrSendText.Text = stringText);
+                    stringText => StrSendText.Text = stringText,
+                    DirectSendHexTextAsync,
+                    DirectSendStringTextAsync);
             }
 
             SendStringLibraryToolForm.Show();

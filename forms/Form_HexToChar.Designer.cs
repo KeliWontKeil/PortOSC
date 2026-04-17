@@ -171,7 +171,7 @@ namespace PortOSC
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(208, 9);
+            label9.Location = new Point(202, 9);
             label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
             label9.Size = new Size(84, 20);
@@ -181,7 +181,7 @@ namespace PortOSC
             // StringText
             // 
             StringText.BorderStyle = BorderStyle.FixedSingle;
-            StringText.Location = new Point(177, 56);
+            StringText.Location = new Point(172, 56);
             StringText.Margin = new Padding(4, 5, 4, 5);
             StringText.Multiline = true;
             StringText.Name = "StringText";
@@ -192,7 +192,7 @@ namespace PortOSC
             // StringHexText
             // 
             StringHexText.BorderStyle = BorderStyle.FixedSingle;
-            StringHexText.Location = new Point(176, 155);
+            StringHexText.Location = new Point(172, 155);
             StringHexText.Margin = new Padding(4, 5, 4, 5);
             StringHexText.Multiline = true;
             StringHexText.Name = "StringHexText";
@@ -213,7 +213,7 @@ namespace PortOSC
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(179, 132);
+            label2.Location = new Point(173, 132);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(39, 20);
@@ -223,7 +223,7 @@ namespace PortOSC
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(179, 33);
+            label3.Location = new Point(174, 33);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(52, 20);
