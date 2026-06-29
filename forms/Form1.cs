@@ -27,7 +27,8 @@ namespace PortOSC
         private readonly ReceivePipeline _receivePipeline;
         private readonly ConcurrentQueue<double[]> _plotQueue;
         private readonly System.Windows.Forms.Timer _plotRefreshTimer;
-        private string HeadStr, EndStr;
+        private volatile string? HeadStr;
+        private volatile string? EndStr;
         private List<ScottPlot.Plottable.DataLogger> loggers;
         private int TimeStamp;
         private ScottPlot.Plottable.HLine Hline;
@@ -56,7 +57,7 @@ namespace PortOSC
         private volatile bool _showHex;
         private volatile bool _appendNewLine;
         private volatile int _channelLength;
-        private volatile int _additionalBufferLength;
+        private volatile int _frameCapacity;
         private List<List<DataPoint>> dataPoints;
 
         private Form_HexToChar? HexToCharToolForm;
@@ -71,8 +72,8 @@ namespace PortOSC
             _receivePipeline = new ReceivePipeline();
             _plotQueue = [];
             _plotRefreshTimer = new System.Windows.Forms.Timer();
-            HeadStr = new string("");
-            EndStr = new string("");
+            HeadStr = "";
+            EndStr = "";
             loggers = [];
             Hline = new ScottPlot.Plottable.HLine();
             Vline = new ScottPlot.Plottable.VLine();
@@ -95,7 +96,7 @@ namespace PortOSC
             ShowHex.CheckedChanged += ReceivePipelineStateChanged;
             RecNewLine.CheckedChanged += ReceivePipelineStateChanged;
             ChannelLength.ValueChanged += ReceivePipelineStateChanged;
-            AdditionalBufferLengthBox.ValueChanged += ReceivePipelineStateChanged;
+            FrameCapacityBox.ValueChanged += ReceivePipelineStateChanged;
 
             OSCSerialPort = new SerialPortSource();
             OSCSerialPort.SerialState.ValueChangedOccured += SerialStateChangeHandle;
@@ -137,10 +138,10 @@ namespace PortOSC
 
         protected override void WndProc(ref Message m)
         {
-            base.WndProc(ref m);
             switch (m.Msg)
             {
                 case WM_DEVICECHANGE:
+                    base.WndProc(ref m);
                     var Port = SerialPort.GetPortNames();
                     if (OSCSerialPort.SerialState.Value == true)
                     {
@@ -157,6 +158,9 @@ namespace PortOSC
                     OSCSerialPort.SerialState.Value = false;
                     PortNameBox.Items.Clear();
                     PortNameBox.Items.AddRange(Port);
+                    break;
+                default:
+                    base.WndProc(ref m);
                     break;
             }
         }
@@ -237,7 +241,7 @@ namespace PortOSC
         {
             foreach (var control in controls)
             {
-                control.Enabled = enabled;
+                SafeOperateTools.SafeInvoke(control,obj => obj.Enabled = enabled);
             }
         }
 
@@ -399,9 +403,9 @@ namespace PortOSC
                 _showHex,
                 _appendNewLine,
                 _channelLength,
-                _additionalBufferLength,
-                HeadStr,
-                EndStr);
+                _frameCapacity,
+                HeadStr ?? "",
+                EndStr ?? "");
         }
 
         private void SyncReceivePipelineState()
@@ -412,7 +416,7 @@ namespace PortOSC
             _showHex = ShowHex.Checked;
             _appendNewLine = RecNewLine.Checked;
             _channelLength = decimal.ToInt32(ChannelLength.Value);
-            _additionalBufferLength = decimal.ToInt32(AdditionalBufferLengthBox.Value);
+            _frameCapacity = decimal.ToInt32(FrameCapacityBox.Value);
         }
 
         private void ReceivePipelineStateChanged(object? sender, EventArgs e)
@@ -712,7 +716,7 @@ namespace PortOSC
 
         private async void StrSendButton_Click(object sender, EventArgs e)
         {
-            byte[] ByteStr = [.. StrSendText.Text.Select(h => Convert.ToByte(h))];
+            byte[] ByteStr = Encoding.UTF8.GetBytes(StrSendText.Text);
             try
             {
                 await SendBytes(ByteStr);
@@ -736,7 +740,7 @@ namespace PortOSC
         {
             ArgumentNullException.ThrowIfNull(text);
 
-            byte[] bytes = [.. text.Select(c => Convert.ToByte(c))];
+            byte[] bytes = Encoding.UTF8.GetBytes(text);
             await SendBytes(bytes);
         }
 
@@ -1102,7 +1106,7 @@ namespace PortOSC
                     ChannelLength.Enabled = false;
                     HeadTextBox.Enabled = false;
                     EndTextBox.Enabled = false;
-                    AdditionalBufferLengthBox.Enabled = false;
+                    FrameCapacityBox.Enabled = false;
                 }
                 catch
                 {
@@ -1115,7 +1119,7 @@ namespace PortOSC
                 ChannelLength.Enabled = true;
                 HeadTextBox.Enabled = true;
                 EndTextBox.Enabled = true;
-                AdditionalBufferLengthBox.Enabled = true;
+                FrameCapacityBox.Enabled = true;
             }
 
             SyncReceivePipelineState();

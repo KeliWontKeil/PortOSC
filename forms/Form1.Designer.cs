@@ -31,6 +31,7 @@ namespace PortOSC
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             PortNameBox = new ComboBox();
             BaudRateBox = new ComboBox();
             DataBitsBox = new ComboBox();
@@ -135,7 +136,7 @@ namespace PortOSC
             label8 = new Label();
             ReceiveModeSelectText = new Label();
             label18 = new Label();
-            AdditionalBufferLengthBox = new NumericUpDown();
+            FrameCapacityBox = new NumericUpDown();
             SaveFileDialog = new SaveFileDialog();
             OpenFileDialog = new OpenFileDialog();
             XStep = new NumberTextBox();
@@ -144,6 +145,7 @@ namespace PortOSC
             LeftLimit = new NumberTextBox();
             BottomLimit = new NumberTextBox();
             TopLimit = new NumberTextBox();
+            errorProvider1 = new ErrorProvider(components);
             ((System.ComponentModel.ISupportInitialize)ChannelLength).BeginInit();
             flowLayoutPanel3.SuspendLayout();
             panel1.SuspendLayout();
@@ -153,7 +155,8 @@ namespace PortOSC
             ClientTCP_Panel.SuspendLayout();
             UDP_Panel.SuspendLayout();
             menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)AdditionalBufferLengthBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)FrameCapacityBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
             // PortNameBox
@@ -1408,22 +1411,24 @@ namespace PortOSC
             // 
             label18.AutoSize = true;
             label18.ImeMode = ImeMode.NoControl;
-            label18.Location = new Point(1302, 611);
+            label18.Location = new Point(1324, 612);
             label18.Margin = new Padding(4, 0, 4, 0);
             label18.Name = "label18";
-            label18.Size = new Size(114, 20);
+            label18.Size = new Size(84, 20);
             label18.TabIndex = 86;
-            label18.Text = "缓冲区附加长度";
+            label18.Text = "帧缓存容量";
             // 
-            // AdditionalBufferLengthBox
+            // FrameCapacityBox
             // 
-            AdditionalBufferLengthBox.BackColor = SystemColors.ButtonHighlight;
-            AdditionalBufferLengthBox.Location = new Point(1425, 608);
-            AdditionalBufferLengthBox.Margin = new Padding(4, 5, 4, 5);
-            AdditionalBufferLengthBox.Maximum = new decimal(new int[] { 65535, 0, 0, 0 });
-            AdditionalBufferLengthBox.Name = "AdditionalBufferLengthBox";
-            AdditionalBufferLengthBox.Size = new Size(85, 27);
-            AdditionalBufferLengthBox.TabIndex = 87;
+            FrameCapacityBox.BackColor = SystemColors.ButtonHighlight;
+            FrameCapacityBox.Location = new Point(1413, 608);
+            FrameCapacityBox.Margin = new Padding(4, 5, 4, 5);
+            FrameCapacityBox.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
+            FrameCapacityBox.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
+            FrameCapacityBox.Name = "FrameCapacityBox";
+            FrameCapacityBox.Size = new Size(85, 27);
+            FrameCapacityBox.TabIndex = 87;
+            FrameCapacityBox.Value = new decimal(new int[] { 30, 0, 0, 0 });
             // 
             // XStep
             // 
@@ -1527,6 +1532,10 @@ namespace PortOSC
             TopLimit.Text = "5.00";
             TopLimit.Leave += TopLimit_Leave;
             // 
+            // errorProvider1
+            // 
+            errorProvider1.ContainerControl = this;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
@@ -1534,7 +1543,7 @@ namespace PortOSC
             AutoScroll = true;
             ClientSize = new Size(1751, 760);
             Controls.Add(menuStrip1);
-            Controls.Add(AdditionalBufferLengthBox);
+            Controls.Add(FrameCapacityBox);
             Controls.Add(label18);
             Controls.Add(ReceiveModeSelectText);
             Controls.Add(label8);
@@ -1608,7 +1617,8 @@ namespace PortOSC
             UDP_Panel.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)AdditionalBufferLengthBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)FrameCapacityBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
             PerformLayout();
 
@@ -1721,7 +1731,7 @@ namespace PortOSC
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label ReceiveModeSelectText;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.NumericUpDown AdditionalBufferLengthBox;
+        private System.Windows.Forms.NumericUpDown FrameCapacityBox;
         private System.Windows.Forms.CheckBox StopReceiveCheckBox;
         private System.Windows.Forms.CheckBox StopSendCheckBox;
         private System.Windows.Forms.SaveFileDialog SaveFileDialog;
@@ -1729,6 +1739,7 @@ namespace PortOSC
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label20;
         private Label label21;
+        private ErrorProvider errorProvider1;
     }
 }
 

@@ -9,7 +9,7 @@ public readonly record struct ReceivePipelineOptions(
     bool ShowHex,
     bool AppendNewLine,
     int ChannelLength,
-    int AdditionalBufferLength,
+    int FrameCapacity,
     string HeadToken,
     string EndToken);
 
@@ -24,6 +24,7 @@ public sealed class ReceivePipelineResult
 public sealed class ReceivePipeline
 {
     private readonly List<string> _oscReceiveBuffer = [];
+    private readonly object _oscBufferLock = new();
 
     public ReceivePipelineResult Process(byte[] sourceData, ReceivePipelineOptions options)
     {
@@ -74,21 +75,33 @@ public sealed class ReceivePipeline
             return;
         }
 
-        var receiveText = Encoding.ASCII.GetString(receivedBytes);
+        // Use Latin-1 encoding to preserve all byte values (0-255) for frame token matching.
+        // ASCII encoding would map bytes > 0x7F to '?', causing frame header/footer match failures.
+        var receiveText = Encoding.GetEncoding("iso-8859-1").GetString(receivedBytes);
         var parts = receiveText.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-        _oscReceiveBuffer.AddRange(parts);
 
-        var maxCount = (options.ChannelLength + 2) * 2 + options.AdditionalBufferLength;
-        if (_oscReceiveBuffer.Count > maxCount)
+        lock (_oscBufferLock)
         {
-            _oscReceiveBuffer.RemoveRange(0, _oscReceiveBuffer.Count - maxCount);
-        }
+            _oscReceiveBuffer.AddRange(parts);
 
-        while (TryExtractFrame(options.HeadToken, options.EndToken, out var frameTokens))
-        {
-            if (TryConvertFrameTokens(frameTokens, out var frame))
+            // FrameCapacity: maximum number of complete frames to buffer before truncation.
+            // This prevents unbounded growth while preserving frame integrity.
+            var frameTokenCount = options.ChannelLength + 2; // head + N data + end
+            var maxCount = frameTokenCount * options.FrameCapacity;
+            if (_oscReceiveBuffer.Count > maxCount)
             {
-                outputFrames.Add(frame);
+                var excess = _oscReceiveBuffer.Count - maxCount;
+                // Align truncation to the closest frame header to avoid cutting a frame in half.
+                var headPos = _oscReceiveBuffer.LastIndexOf(options.HeadToken, excess - 1);
+                _oscReceiveBuffer.RemoveRange(0, headPos >= 0 ? headPos : excess);
+            }
+
+            while (TryExtractFrame(options.HeadToken, options.EndToken, options.ChannelLength, out var frameTokens))
+            {
+                if (TryConvertFrameTokens(frameTokens, out var frame))
+                {
+                    outputFrames.Add(frame);
+                }
             }
         }
     }
@@ -110,14 +123,18 @@ public sealed class ReceivePipeline
         return true;
     }
 
-    private bool TryExtractFrame(string headToken, string endToken, out List<string> frameTokens)
+    private bool TryExtractFrame(string headToken, string endToken, int channelLength, out List<string> frameTokens)
     {
         frameTokens = [];
 
-        var headIndex = _oscReceiveBuffer.LastIndexOf(headToken);
-        var endIndex = _oscReceiveBuffer.LastIndexOf(endToken);
+        var headIndex = _oscReceiveBuffer.IndexOf(headToken);
+        if (headIndex < 0)
+        {
+            return false;
+        }
 
-        if (headIndex < 0 || endIndex < 0 || headIndex >= endIndex)
+        var endIndex = _oscReceiveBuffer.IndexOf(endToken, headIndex + 1);
+        if (endIndex < 0)
         {
             return false;
         }
@@ -129,8 +146,16 @@ public sealed class ReceivePipeline
             return false;
         }
 
+        // Token count must match exactly the number of data channels.
+        // A mismatch indicates a corrupted/truncated/interleaved frame — discard it.
+        if (count != channelLength)
+        {
+            _oscReceiveBuffer.RemoveRange(headIndex, endIndex - headIndex + 1);
+            return false;
+        }
+
         frameTokens = _oscReceiveBuffer.GetRange(start, count);
-        _oscReceiveBuffer.RemoveRange(0, endIndex + 1);
+        _oscReceiveBuffer.RemoveRange(headIndex, endIndex - headIndex + 1);
 
         return true;
     }
